@@ -1,12 +1,12 @@
 import '../assets/css/app.css';
 import { Routes } from "../component";
-// import AppState from '../store/AppProvider';
+import AppProvider from '../store/AppProvider';
 
 const App = () => {
     return (
-        // <AppState>
+        <AppProvider>
             <Routes />
-        // </AppState>
+        </AppProvider>
     );
 };
 

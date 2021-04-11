@@ -1,6 +1,7 @@
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import { Home } from "../component";
+import {BrowserRouter as Router, Switch} from "react-router-dom";
+import { Header } from "../component";
 import styled from "styled-components";
+import { ROUTES, ProtectedRoute } from "../helpers/routeHelper";
 
 export const ContentStyled = styled.div `
     position: absolute;
@@ -15,10 +16,12 @@ export const ContentStyled = styled.div `
 const Routes = () => {
     return (
         <Router>
-            {/* <Header /> */}
+            <Header />
             <ContentStyled>
-                <Switch>                    
-                    <Route component={Home} path='/' exact />
+                <Switch> 
+                    {ROUTES.map((route, key) => {
+                        return <ProtectedRoute exact path={route.path} component={route.component} key={key} auth={route.auth} allowTo={route.allowTo}/>
+                    })}
                 </Switch>
             </ContentStyled>
         </Router>

@@ -3,8 +3,9 @@
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    font-family: adobeCaslonProRegular;
+    /* font-family: adobeCaslonProRegular; */
     /* font-family: athelasRegular; */
+    font-family: encodeSansCondensedRegular;
 }
 
 html {
@@ -25,4 +26,9 @@ body {
 @font-face {
     font-family: athelasRegular;
     src: url("../fonts/athelasRegular.ttf");
+}
+
+@font-face {
+    font-family: encodeSansCondensedRegular;
+    src: url("../fonts/encodeSansCondensedRegular.ttf");
 }
