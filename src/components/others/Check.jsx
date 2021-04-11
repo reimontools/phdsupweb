@@ -4,11 +4,8 @@ const CheckStyled = styled.div `
     margin: 10px 0 10px 0;
     display: flex;
     align-items: center;
-    justify-content: ${({ flexJustifyContent }) => flexJustifyContent ? flexJustifyContent : 'center'};
+    justify-content: ${({ flexJustifyContent }) => flexJustifyContent ? flexJustifyContent : 'space-between'};
     .toogle {
-        --width: 40px;
-        --height: calc(var(--width) / 2);
-        --border-radius: calc(var(--height) / 2);
         display: inline-block;
         cursor: pointer;
     };
@@ -22,14 +19,14 @@ const CheckStyled = styled.div `
     };
 
     .toogle-input:checked ~ .toogle-fill::after {
-        transform: translateX(var(--height));
+        transform: translateX(20px);
     };
 
     .toogle-fill {
         position: relative;
-        width: var(--width);
-        height: var(--height);
-        border-radius: var(--border-radius);
+        width: 40px;
+        height: 20px;
+        border-radius: 10px;
         background: #dddddd;
         transition: background 0.2s;
     };
@@ -37,27 +34,26 @@ const CheckStyled = styled.div `
     .toogle-fill::after {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        height: var(--height);
-        width: var(--height);
+        top: 2px;
+        left: 2px;
+        height: 16px;
+        width: 16px;
         background: #ffffff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-        border-radius: var(--border-radius);
+        border-radius: 10px;
         transition: transform 0.2s;
     };
 `;
 
 const Check = { 
-    Basic: ({id, text, action, ...props}) => {
+    Basic: ({text, action, ...props}) => {
         return (
             <CheckStyled {...props}>
                 <label>{text}</label>
-                <label className="toogle" htmlFor={id}>
+                <label className="toogle" >
                     <input 
                         className="toogle-input" 
                         type="checkbox" 
-                        id={id}
                         value={props.value}
                         onChange={e => action(e.target.checked)} />
                     <div className="toogle-fill" />

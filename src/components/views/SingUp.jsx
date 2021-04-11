@@ -50,11 +50,15 @@ const SignUp = () => {
             <Select.Validation name="country" type="select" text="Country" register={register} content={countryList} />
             <Select.Validation name="university" type="select" text="University" register={register} content={universityList} />
 
-            <Check.Basic id="currentPhd" value={isCurrentPhd} action={setIsCurrentPhd} text="Are you currently PhD student?" flexJustifyContent="space-between"/>
-            {isCurrentPhd && <Select.Validation name="yearCurrentPhd" type="select" text="In which year are you?" register={register} content={yearCurrentPhdList} />}
+            <Check.Basic value={isCurrentPhd} action={setIsCurrentPhd} text="Are you currently PhD student?"/>
+            {isCurrentPhd && 
+                <Select.Validation name="yearCurrentPhd" type="select" text="In which year are you?" register={register} content={yearCurrentPhdList} />
+            }
 
-            <Check.Basic id="finishPhd" value={isFinishPhd} action={setIsFinishPhd} text="Did you finished your PhD?" flexJustifyContent="space-between"/>
-            {isFinishPhd && <Select.Validation name="yearFinishPhd" type="select" text="In which Year?" register={register} content={yearFinishPhdList} />}
+            <Check.Basic value={isFinishPhd} action={setIsFinishPhd} text="Did you finished your PhD?"/>
+            {isFinishPhd && 
+                <Select.Validation name="yearFinishPhd" type="select" text="In which Year?" register={register} content={yearFinishPhdList} />
+            }
 
             <Input.TextValidation placeholder="Password" name="password" type="password" register={register} error={errors.password} />
             <Input.TextValidation placeholder="Confirm password" name="passwordToValid" type="password" register={register} error={errors.password} />
