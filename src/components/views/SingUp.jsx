@@ -34,6 +34,8 @@ const SignUp = () => {
 
     const yearCurrentPhdList = [{id: 1, name: 1}, {id: 2, name: 2}, {id: 3, name: 3}, {id: 4, name: 4}, {id: 5, name: 5}, {id: 6, name: 6}];
     const yearFinishPhdList = [{id: 1, name: "1-3 years ago"}, {id: 2, name: "4-6 years ago"}, {id: 3, name: "7-9 years ago"}, {id: 4, name: "More than 10 years ago"}];
+    const countryList = [{id: 1, name: "UK"}];
+    const universityList = [{id: 1, name: "Imperial College London"}, {id: 2, name: "University of Glasgow"}];
     
     /*JSX ############################################################################################*/ 
     return (
@@ -44,6 +46,9 @@ const SignUp = () => {
             <Input.TextValidation name="nickname" placeholder="Nickname" register={register} error={errors.nickname} />
             <Input.TextValidation name="email" type="email" placeholder="email@email.com" register={register} error={errors.email} />
             <Input.TextValidation name="mobile" placeholder="Mobile number" register={register} error={errors.mobile} />
+
+            <Select.Validation name="country" type="select" text="Country" register={register} content={countryList} />
+            <Select.Validation name="university" type="select" text="University" register={register} content={universityList} />
 
             <Check.Basic id="currentPhd" value={isCurrentPhd} action={setIsCurrentPhd} text="Are you currently PhD student?" flexJustifyContent="space-between"/>
             {isCurrentPhd && <Select.Validation name="yearCurrentPhd" type="select" text="In which year are you?" register={register} content={yearCurrentPhdList} />}
