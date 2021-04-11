@@ -38,7 +38,7 @@ const SignUp = () => {
     /*JSX ############################################################################################*/ 
     return (
         <Container.Basic width="400px">
-            <Title.Basic>Sign In</Title.Basic>
+            <Title.Basic>Sign Up</Title.Basic>
             <Input.TextValidation name="name" placeholder="Name" register={register} error={errors.name} />
             <Input.TextValidation name="surname" placeholder="Surname" register={register} error={errors.surname} />
             <Input.TextValidation name="nickname" placeholder="Nickname" register={register} error={errors.nickname} />
@@ -46,14 +46,10 @@ const SignUp = () => {
             <Input.TextValidation name="mobile" placeholder="Mobile number" register={register} error={errors.mobile} />
 
             <Check.Basic id="currentPhd" value={isCurrentPhd} action={setIsCurrentPhd} text="Are you currently PhD student?" flexJustifyContent="space-between"/>
-            {isCurrentPhd &&
-                <Select.Validation name="yearCurrentPhd" type="select" text="In which year are you?" register={register} content={yearCurrentPhdList} />
-            }
+            {isCurrentPhd && <Select.Validation name="yearCurrentPhd" type="select" text="In which year are you?" register={register} content={yearCurrentPhdList} />}
 
             <Check.Basic id="finishPhd" value={isFinishPhd} action={setIsFinishPhd} text="Did you finished your PhD?" flexJustifyContent="space-between"/>
-            {isFinishPhd &&
-                <Select.Validation name="yearFinishPhd" type="select" text="In which Year?" register={register} content={yearFinishPhdList} />
-            }
+            {isFinishPhd && <Select.Validation name="yearFinishPhd" type="select" text="In which Year?" register={register} content={yearFinishPhdList} />}
 
             <Input.TextValidation placeholder="Password" name="password" type="password" register={register} error={errors.password} />
             <Input.TextValidation placeholder="Confirm password" name="passwordToValid" type="password" register={register} error={errors.password} />
