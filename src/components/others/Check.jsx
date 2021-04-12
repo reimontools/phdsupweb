@@ -9,7 +9,6 @@ const CheckStyled = styled.div `
         display: inline-block;
         cursor: pointer;
     };
-
     .toogle-input {
         display: none;
     };
@@ -17,11 +16,9 @@ const CheckStyled = styled.div `
     .toogle-input:checked ~ .toogle-fill {
         background: #663165;
     };
-
     .toogle-input:checked ~ .toogle-fill::after {
         transform: translateX(20px);
     };
-
     .toogle-fill {
         position: relative;
         width: 40px;
@@ -30,7 +27,6 @@ const CheckStyled = styled.div `
         background: #dddddd;
         transition: background 0.2s;
     };
-
     .toogle-fill::after {
         content: "";
         position: absolute;
