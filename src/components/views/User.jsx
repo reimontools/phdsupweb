@@ -1,72 +1,146 @@
 import { useState, useEffect} from "react";
 import { useForm } from "react-hook-form";
-import { Input, Icon, Modal, Button, Select, Table, Container, Loading, Title } from "../../component";
-import useModal from "../../hooks/useModal";
+import { Check, Table, Loading, Container, Icon, Dialog, Modal, Title, Button, Select, Input } from "../../component";
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getList } from '../../helpers/listHelper'; 
-import axios from '../../config/axios'
+import { getList } from '../../helpers/listHelper';
+import useModal from "../../hooks/useModal";
+import { LOWERCASEREGEX, UPPERCASEREGEX, NUMERICREGEX } from "../../helpers/paramHelper";
 import useList from '../../hooks/useList';
+import axios from '../../config/axios'
 
 const User = () => {
-    useEffect(() => fetchUsers(), []);
-    const [users, setUsers] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [currentUserId, setCurrentUserId] = useState(0);
-    const [isOpenModal, openModal, closeModal] = useModal();
-    const defaultData = {user_id: 0, name: '', email: '', rol_id: 2};
-    const [loading, setLoading] = useState(true);
-    const rols = useList("list/rol");
     
-    /*VALIDATIONS ####################################################################################*/ 
-    const schema = Yup.object().shape({
-        name: Yup.string().required('Required'),
-        email: Yup.string().email("Invalid format").required('Required')
+    // CONST ########################################################################################################################################
+    const defaultPassword = {password: "", passwordConfirm: ""};
+
+    // STATE ########################################################################################################################################
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [currentUserId, setCurrentUserId] = useState(0);
+    const [dialogOptions, setDialogOptions] = useState({});
+    const [isOpenModalCrud, openModalCrud, closeModalCrud] = useModal();
+    const [isOpenModalPassword, openModalPassword, closeModalPassword] = useModal();
+
+    // LIST #########################################################################################################################################
+    const phdCurrentYearList = useList("list/phd-current-year");
+    const phdFinishYearList = useList("list/phd-finish-year");
+    const countryList = useList("list/country");
+    const universityList = useList("list/university");
+    const researchAreaList = useList("list/research-area");
+
+    // EFFECT #######################################################################################################################################
+    useEffect(() => fetchUsers(), []);
+
+    // CRUD VALIDATIONS #############################################################################################################################
+    const schemaCrud = Yup.object().shape({
+        name: Yup.string()
+            .required('Required !')
+            .min(2, "Too short!"),
+        surname: Yup.string()
+            .required('Required!')
+            .min(2, "Too short!"),
+        nickname: Yup.string()
+            .required('Required!')
+            .min(4, "Too short!"),
+        email: Yup.string()
+            .required('Required!')
+            .lowercase()
+            .email("Must be a valid email !"),
+        country_id: Yup.string()
+            .required('Required!'),
+        university_id: Yup.string()
+            .required('Required!'),
+        research_area_id: Yup.string()
+            .required('Required!'),
+        phd_finish_year_id: Yup.string()
+            .required('Required!'),
+        phd_current_year_id: Yup.string()
+            .required('Required!')
     });
 
-    const { register, handleSubmit, errors, reset } = useForm({
-        mode: 'onSubmit',
-        resolver: yupResolver(schema)
+    const { register: registerCrud, handleSubmit: handleSubmitCrud, errors: errorsCrud, reset: resetCrud } = useForm({
+        mode: 'onBlur',
+        resolver: yupResolver(schemaCrud)
     });
 
-    const openForm = user => {
-        setCurrentUserId(user.user_id);
-        reset(user);
-        openModal();
-    };
+    // PASSWORD VALIDATIONS #########################################################################################################################
+    const schemaPassword = Yup.object().shape({
+        password: Yup.string()
+            .required('Required!')
+            .min(8, "Minimun 8 characters required!")
+            .matches(NUMERICREGEX, 'One number required!')
+            .matches(LOWERCASEREGEX, 'One lowercase required!')
+            .matches(UPPERCASEREGEX, 'One uppercase required!'),
+        passwordConfirm: Yup.string()
+            .required('Required!')
+            .oneOf([Yup.ref('password')], 'Password must be the same!')
+    });
 
-    /*CRUD ###########################################################################################*/ 
+    const { register: registerPassword, handleSubmit: handleSubmitPassword, errors: errorsPassword, reset: resetPassword } = useForm({
+        mode: 'onBlur',
+        resolver: yupResolver(schemaPassword)
+    });
+
+    // FETCHS #######################################################################################################################################
     const fetchUsers = async () => {
         setLoading(true);
-        const res = await getList("user");
-        setUsers(res);
+        let users = await getList("user");
+        setUsers(users);
         setLoading(false);
     };
 
-    const addUser = async data => {
+    // CRUD #########################################################################################################################################
+    const updateUser = async data => {
+        const phd_year_id = data.is_phd_finish ? data.phd_finish_year_id : data.phd_current_year_id;
         try {
-            const res = await axios.post("user", {user_id: currentUserId, ...data});
+            const res = await axios.post("user", {user_id: currentUserId, phd_year_id, ...data});
             switch(res.data.result.cod) {
                 case 0:
+                    // setDialogOptions({family: "info", title: 'Success', text : 'User was updated!'});
                     fetchUsers();
-                    closeModal();
+                    closeModalCrud();
                     break;
                 case 1:
-                    alert('Ya existe!');
+                    setDialogOptions({family: "info", title: 'Alert', text : 'User already exists!'})
                     break;
                 case 2:
-                    alert('Ya existe inactivo!');
+                    setDialogOptions({family: "info", title: 'Alert', text : 'User already exists! (nonActive)'})
                     break;
                 default:
-                    alert('Otro problema!, error: ' + res.data.result.msg);
+                    setDialogOptions({family: "info", title: 'Error', text : 'Error: ' + res.data.result.msg})
                     break;
             };
         } catch(err) {
             console.log('Err: ' + err);
         };
     };
-    
-    const staUser = async (id) => {
+
+    const updateUserState = async (id, state_id) => {
+        try {
+            const res = await axios.post("state/", {state_id, name: "user", id});
+            if (res.data.result.cod === 0) return fetchUsers();
+            setDialogOptions({family: "info", title: 'Alert', text : 'Error: ' + res.data.result.msg})
+        } catch(err) {
+            console.log('Err: ' + err);
+        };
+    };
+
+    const updateUserPassword = async data => {
+        try {
+            const res = await axios.post("user/concre", {user_id: currentUserId, ...data});
+            if (res.data.result.cod === 0) {
+                fetchUsers();
+                closeModalPassword();
+            } else {
+                setDialogOptions({family: "info", title: 'Alert', text : 'Error: ' + res.data.result.msg})
+            };
+        } catch(err) {
+            console.log('Err: ' + err);
+        };
+    };
+
+    const updateUserActive = async id => {
         try {
             const res = await axios.put("user/" + id);
             if (!res.data.error) {
@@ -77,65 +151,159 @@ const User = () => {
         };
     };
 
-    function filUser(user) {
-        if(searchTerm === "") {
-            return user;
-        } else if (user.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-            return user;
+    // HANDLES ######################################################################################################################################
+    const handleExpandir = id => {
+        if (id === currentUserId) {
+            setCurrentUserId(0);
+        } else {
+            setCurrentUserId(id);
         };
-        return null;
     };
 
-    /*JSX ############################################################################################*/ 
+    const handleClickOptions = (e, user) => {
+        e.stopPropagation();
+        setDialogOptions({family: "delete", title: 'Delete this user?', text: 'Are you sure you want to delete this user?', action: () => updateUserActive(user.user_id) });
+    };
+
+    const handleModalCrud = (e, user) => {
+        e.stopPropagation();
+        setCurrentUserId(user.user_id);
+        resetCrud(user);
+        openModalCrud();
+    };
+
+    const handleModalPassword = (e, user) => {
+        e.stopPropagation();
+        setCurrentUserId(user.user_id);
+        resetPassword(defaultPassword);
+        openModalPassword();
+    };
+
+    const handleUserState = (e, user) => {
+        e.stopPropagation();
+        if (user.state_id === 1) updateUserState(user.user_id, 2);
+        if (user.state_id === 2) updateUserState(user.user_id, 1);
+    };
+
+    // RENDERS ######################################################################################################################################
+    const renderTableHead = () => {
+        return (
+            <tr>
+                <th>Fullname</th>
+                <th>Nickname</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>University</th>
+                <th>Rol</th>
+                <th>State</th>
+                <th>Actions</th>
+            </tr>
+        );
+    };
+
+    const renderTableRows = user => {
+        var classContent = "";
+        var classActions = "";
+
+        if (user.user_id === currentUserId) {
+            classContent = "content unhide"
+            classActions = "unhide"
+        } else {
+            classContent = "content hide"
+            classActions = "hide"
+        };
+
+        return (
+            <tr key={user.user_id} onClick={() => handleExpandir(user.user_id)}>
+                <td className="head">{user.fullname}</td>
+                <td className={classContent} data-label='Nickname'>{user.nickname}</td>
+                <td className={classContent} data-label='Email'>{user.email}</td>
+                <td className={classContent} data-label='Mobile'>{user.mobile_number}</td>
+                <td className={classContent} data-label='University'>{user.university_name}</td>
+                <td className={classContent} data-label='Rol'>{user.rol_name}</td>
+                {/* <td className={classContent} data-label='State'>{user.state_name}</td> */}
+                <td className={classContent} data-label='State'>{renderButtonState(user)}</td>
+                <td className={classActions}>{renderActions(user)}</td>
+            </tr>  
+        );
+    };
+
+    const renderActions = user => {
+        return (
+            <div className="td-container">
+                <Icon.Basic 
+                    onClick={e => handleModalCrud(e, user)}
+                    family="edit"
+                    hover
+                />
+                <Icon.Basic 
+                    onClick={e => handleModalPassword(e, user)}
+                    family="password" 
+                    hover
+                />
+                <Icon.Basic 
+                    onClick={e => handleClickOptions(e, user)}
+                    family="delete" 
+                    hover
+                />
+            </div>
+        );
+    };
+
+    const renderButtonState = user => {
+        var text = user.state_name, family = "";
+        user.state_id === 1 ? family = "check" : family = "edit";
+        return <Button.Basic family={family} onClick={e => handleUserState(e, user)} fit height="auto" size="12px" weight="400" hover>{text}</Button.Basic>;
+    };
+    
+    // JSX ##########################################################################################################################################
     return (
         <Container.Primary>
-            <div className="search-container">
-                <Input.TextAction name="search" placeholder="Search..." value={searchTerm} action={setSearchTerm} />
-                <Icon.Basic family="add" action={() => openForm(defaultData)} right="12px" hover/>
-            </div>
+            <Title.Primary>Users</Title.Primary>
             {loading 
                 ? <Loading/>
                 : <Container.Table>
-                    <Table.Primary>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Rol</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {users.filter(filUser).map(user => (
-                                <tr key={user.user_id}>
-                                    <td data-label='Name'>{user.name}</td>
-                                    <td data-label='Email'>{user.email}</td>
-                                    <td data-label='Rol'>{user.rol_name}</td>
-                                    <td data-label='Actions'>
-                                        <div className="td-container">
-                                            <Icon.Basic family="edit" action={() => openForm(user)} hover/>
-                                            <Icon.Basic family="delete" action={() => staUser(user.user_id)} hover/>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table.Primary>
-                </Container.Table>}
-                
-            <Modal.ForForm isOpen={isOpenModal} closeModal={closeModal}>
+                    <Table.Basic>
+                        <thead>{ renderTableHead() }</thead>
+                        <tbody>{ users.map(user => renderTableRows(user)) }</tbody>
+                    </Table.Basic>
+                </Container.Table>
+            }
+
+            {/* MODAL CRUD ########################################################################################################################## */}
+            <Modal.Form isOpen={isOpenModalCrud} closeModal={closeModalCrud}>
                 <Container.Basic>
                     <Title.Basic>{currentUserId === 0 ? 'New User' : 'Update User'}</Title.Basic>
-                    <Input.TextValidation name="name" placeholder="Name" register={register} error={errors.name} />
-                    <Input.TextValidation name="email" type="email" placeholder="email@email.com" register={register} error={errors.email}/>
-                    <Select.TextValidation name="rol_id" type="select" register={register} error={errors.user_type_id} content={rols} />
-                    <Input.TextValidation name="password" type="password" register={register} />
-                    <Button.Basic action={handleSubmit(addUser)} margin="0 0 10px 0px">Save</Button.Basic>
+                    <Input.Validation name="name" label="Name *" placeholder="Set your name" register={registerCrud} error={errorsCrud.name} />
+                    <Input.Validation name="surname" label="Surname *" placeholder="Set your surname" register={registerCrud} error={errorsCrud.surname} />
+                    <Input.Validation name="nickname" label="Nickname *" placeholder="Set your nickname" register={registerCrud} error={errorsCrud.nickname} />
+                    <Input.Validation name="email" label="Email *" placeholder="example@gmail.com" register={registerCrud} error={errorsCrud.email} />
+                    <Input.Validation name="mobile_number" label="Mobile number" placeholder="+569 98416398" register={registerCrud} error={errorsCrud.mobile} />
+                    <Select.Validation name="country_id" label="Country *" placeholder="Select a country" register={registerCrud} content={countryList} error={errorsCrud.country_id}/>
+                    <Select.Validation name="university_id" label="University *" placeholder="Select a university" register={registerCrud} content={universityList} error={errorsCrud.university_id}/>
+                    <Select.Validation name="research_area_id" label="Research area *" placeholder="Select a research area" register={registerCrud} content={researchAreaList} error={errorsCrud.research_area_id}/>
+                    <Check.Basic name="is_phd_finish" label="Did you finish your PhD?" register={registerCrud} />
+                    <Select.Validation name="phd_finish_year_id" label="In which year did you finish?" placeholder="Select a year" register={registerCrud} content={phdFinishYearList} error={errorsCrud.phd_finish_year_id}/>
+                    <Select.Validation name="phd_current_year_id" label=" In which year are you?" placeholder="Select a year" register={registerCrud} content={phdCurrentYearList} error={errorsCrud.phd_current_year_id}/>
+                    <Input.Validation name="keywords" label="Keywords" placeholder="Mention at least 3" register={registerCrud} error={errorsCrud.keywords} />
+                    <Button.Basic onClick={handleSubmitCrud(updateUser)}>Save</Button.Basic>
                 </Container.Basic>
-            </Modal.ForForm>
-           
+            </Modal.Form>
+            
+            {/* MODAL PASSWORD ###################################################################################################################### */}
+            <Modal.Form isOpen={isOpenModalPassword} closeModal={closeModalPassword}>
+                <Container.Basic>
+                    <Title.Basic>Update password</Title.Basic>
+                    <Input.Validation name="password" label="Password *" type="password" register={registerPassword} error={errorsPassword.password} />
+                    <Input.Validation name="passwordConfirm" label="Confirm password *" type="password" register={registerPassword} error={errorsPassword.passwordConfirm} />
+                    <Button.Basic onClick={handleSubmitPassword(updateUserPassword)}>Save</Button.Basic>
+                </Container.Basic>
+            </Modal.Form>
+            
+            {/* DIALOG ############################################################################################################################## */}
+            <Dialog.Action options={ dialogOptions } close={() => setDialogOptions({})} />
         </Container.Primary>
-    );
+    );  
 };
 
 export default User;

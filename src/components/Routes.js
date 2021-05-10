@@ -6,7 +6,7 @@ import { ROUTES, ProtectedRoute } from "../helpers/routeHelper";
 export const ContentStyled = styled.div `
     position: absolute;
     width: 100%;
-    top: 12%;
+    top: 60px;
     display: flex;
     align-items: center; 
     justify-content: center;

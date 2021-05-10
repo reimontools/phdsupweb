@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { PRIMARY_COLOR } from "../../helpers/paramHelper";
 
 const CheckStyled = styled.div `
     margin: 10px 0 10px 0;
@@ -14,7 +15,7 @@ const CheckStyled = styled.div `
     };
 
     .toogle-input:checked ~ .toogle-fill {
-        background: #663165;
+        background: ${PRIMARY_COLOR};
     };
     .toogle-input:checked ~ .toogle-fill::after {
         transform: translateX(20px);
@@ -42,16 +43,17 @@ const CheckStyled = styled.div `
 `;
 
 const Check = { 
-    Basic: ({text, action, ...props}) => {
+    Basic: ({register, label, ...checkProps}) => {
         return (
-            <CheckStyled {...props}>
-                <label>{text}</label>
+            <CheckStyled {...checkProps}>
+                <label>{label}</label>
                 <label className="toogle" >
                     <input 
-                        className="toogle-input" 
+                        ref={register}
                         type="checkbox" 
-                        value={props.value}
-                        onChange={e => action(e.target.checked)} />
+                        className="toogle-input" 
+                        name={checkProps.name}
+                    />
                     <div className="toogle-fill" />
                 </label>
             </CheckStyled>

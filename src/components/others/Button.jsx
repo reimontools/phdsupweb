@@ -1,9 +1,10 @@
 import { MEDIUM_SCREEN_SIZE_PX, getColorByFamily } from "../../helpers/paramHelper";
 import styled from "styled-components";
 
-const DivButtonStyled = styled.button `
+const ButtonButtonStyled = styled.button `
     cursor: pointer;
     margin: ${({ margin }) => margin ? margin : '0'};
+    /* margin-top: 5px; */
     padding: 5px;
     height: ${({ height }) => height ? height : '45px'};
     background: ${({ family }) => getColorByFamily(family)};
@@ -18,7 +19,7 @@ const DivButtonStyled = styled.button `
     transition: .1s ease all;
     &:hover {
         /* box-shadow: 3px 0px 30px rgba(163, 163, 163, 1); */
-        transform: ${({ hover }) => hover ? 'scale(1.5)' : 'none'};
+        transform: ${({ hover }) => hover ? 'scale(1.2)' : 'none'};
     };
     @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
         &:hover {
@@ -28,14 +29,8 @@ const DivButtonStyled = styled.button `
 `;
 
 const Button = {
-    Basic: ({action, ...props}) => {
-        return (
-            <DivButtonStyled 
-                type='button'
-                {...props}
-                onClick={action}
-            />
-        );
+    Basic: ({...buttonProps}) => {
+        return <ButtonButtonStyled {...buttonProps} type='button'/>;
     }
 };
 

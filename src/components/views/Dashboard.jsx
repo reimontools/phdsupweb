@@ -1,8 +1,8 @@
 import { Title, Container } from "../../component";
-export default function Home() {
+export default function Dashboard() {
     return (
         <Container.Basic>
-            <Title.Primary>Home</Title.Primary>
+            <Title.Primary>Dashboard</Title.Primary>
         </Container.Basic>
     );
 };

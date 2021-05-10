@@ -2,6 +2,7 @@ import {Redirect, Route} from "react-router-dom";
 import useAppContext from '../hooks/useAppContext';
 
 import Home from '../components/views/Home';
+import Dashboard from '../components/views/Dashboard';
 import SignIn from '../components/views/SignIn';
 import SignUp from '../components/views/SingUp';
 import User from '../components/views/User';
@@ -15,6 +16,14 @@ export const ROUTES = [
         allowTo: ['*'],
         showInBar: true,
         auth: 'all'
+    },
+    {
+        title: 'Dashboard',
+        path: '/Dashboard',
+        component: Dashboard, 
+        allowTo: ['User'],
+        showInBar: true,
+        auth: 'auth'
     },
     {
         title: 'Users',

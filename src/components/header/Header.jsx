@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { NavBar, Logo, Burger } from "../../component";
-import { MEDIUM_SCREEN_SIZE_PX } from "../../helpers/paramHelper";
+import { NavBar, Burger } from "../../component";
+import { MEDIUM_SCREEN_SIZE_PX, PRIMARY_COLOR } from "../../helpers/paramHelper";
 
 export const HeaderStyled = styled.div `
     position: fixed;
     width: 100%;
-    height: 10%;
+    height: 60px;
     top: 0;
-    background-color: #663165;
+    background-color: ${PRIMARY_COLOR};
     display: flex;
     align-items: center; 
     z-index: 500;
@@ -19,7 +19,7 @@ export const HeaderStyled = styled.div `
 const Header = () => {
     return (
        <HeaderStyled>
-           <Logo />
+           {/* <Logo /> */}
            <Burger />
            <NavBar />
         </HeaderStyled>

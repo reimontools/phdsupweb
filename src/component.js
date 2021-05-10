@@ -15,6 +15,7 @@ export {default as Modal} from "./components/others/Modal";
 export {default as Title} from "./components/others/Title";
 export {default as Check} from "./components/others/Check";
 
+export {default as Dialog} from "./components/others/Dialog";
 export {default as Card} from "./components/others/Card";
 export {default as Input} from "./components/others/Input";
 export {default as Select} from "./components/others/Select";

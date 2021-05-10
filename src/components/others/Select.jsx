@@ -1,54 +1,73 @@
 import styled from "styled-components";
+import { PRIMARY_COLOR } from "../../helpers/paramHelper";
 
 const DivSelectStyled = styled.div `
-    margin: 10px 0 10px 0;
-    width: 100%;
-    color: #222;
-    label {
-        position: absolute;
-            top: -10px;
-        font-weight: 600;
-        padding: 3px;
-        cursor: pointer; 
-    };
+    position: relative;
+    padding: 10px 0;
+    margin-bottom: 3px;
     select {
         -webkit-appearance: none;
+        cursor: pointer;
+        padding: 12px 17px 12px 17px;
+        border-radius: 3px;
         width: 100%;
-        background: #fff;
-        border: 3px solid transparent;
-        border-radius: 5px;
-        height: 45px;
-        padding: 0 40px 0 10px;
-        transition: .3s ease all;
-        border: 2px solid #663165;
+        height: 46px;
         outline: none;
-        &:focus {
-            box-shadow: 3px 0px 30px rgba(163, 163, 163, 0.4)
+        border: 2px solid ${PRIMARY_COLOR};
+        font-size: 15px;
+        &:not(:valid) {
+            color: #757575;
         };
     };
-    
-    p {
-        font-size: 10px;
+    option { 
+        color: #222;
+    };
+    .label {
+        position: absolute;
+        top: 10px;
+        transform: translateY(-50%);
+        padding: 0 5px;
+        left: 8px;
+        color: #222;
+        background: #fff;
+        background-size: 1px;
+        font-size: 13px;
+    };
+    .error {
+        position: absolute;
+        bottom: 3px;
+        transform: translateY(50%);
+        right: 8px;
+        font-size: 12px;
         font-weight: 600;
-        font-style: oblique;
         color: #bb3345;
-        text-align: right;
-        padding-top: 1px;
-        padding-right: 5px;
+    };
+    .arrow {
+        pointer-events: none;
+        position: absolute;
+        top: calc(50%);
+        transform: translateY(-50%);
+        right: 17px;
+        font-size: 15px;
+        font-weight: 600;
+        color: ${PRIMARY_COLOR};
     };
 `;
 
 const Select = {
-    Validation: ({register, text, error, content, ...inputTextProps}) => {
+    Validation: ({register, label, error, placeholder, content, ...selectProps}) => {
         return (
-            <DivSelectStyled>
+            <DivSelectStyled {...selectProps}>
                 <select 
+                    required
                     ref={register}
-                    {...inputTextProps}>
-                        {text && <option hidden value="">{text}</option>}
+                    name={selectProps.name}>
+                        {placeholder && <option value="" hidden>{placeholder}</option>}
                         {content.map(e => (<option key={e[Object.keys(e)[0]]} value={e[Object.keys(e)[0]]}>{e[Object.keys(e)[1]]}</option>))}
                 </select>
-                {error && <p>{error.message}</p>}
+                <label className="arrow">{"▼"}</label>
+                {label && <span className="label">{label}</span>}
+                {error && <span className="error">{error.message}</span>}
             </DivSelectStyled>
         );
     }

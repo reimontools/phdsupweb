@@ -1,15 +1,26 @@
 import styled from "styled-components";
+import { PRIMARY_COLOR } from "../../helpers/paramHelper";
 
 const TitleBasicStyled = styled.div `
-    /* position: relative; */
     display: flex;
     align-items: center; 
     justify-content: center;
     width: 100%;
-    font-size: 30px;
+    font-size: ${({ fontSize }) => fontSize ? fontSize : "20px"};
     font-weight: 700;
-    color: #ebd6eb;
-    text-align: left;
+    color: ${({ color }) => color ? color : PRIMARY_COLOR};
+    padding-bottom: 5px;
+`;
+
+const TitlePrimaryStyled = styled.div `
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    width: 100%;
+    font-size: ${({ fontSize }) => fontSize ? fontSize : "25px"};
+    font-weight: 700;
+    color: ${({ color }) => color ? color : PRIMARY_COLOR};
+    padding: 10px;
 `;
 
 const TitleBasic2Styled = styled.div `
@@ -19,9 +30,16 @@ const TitleBasic2Styled = styled.div `
 `;
 
 const Title = {
-    Basic: ({children, ...props}) => {
+    Primary: ({children, ...titleProps}) => {
         return ( 
-            <TitleBasicStyled>
+            <TitlePrimaryStyled {...titleProps}>
+                {children}
+            </TitlePrimaryStyled>
+        );
+    },
+    Basic: ({children, ...titleProps}) => {
+        return ( 
+            <TitleBasicStyled {...titleProps}>
                 {children}
             </TitleBasicStyled>
         );

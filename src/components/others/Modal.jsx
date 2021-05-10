@@ -1,9 +1,9 @@
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { Icon} from "../../component";
-import { MEDIUM_SCREEN_SIZE_PX } from "../../helpers/paramHelper";
+import { MEDIUM_SCREEN_SIZE_PX, SECONDARY_COLOR } from "../../helpers/paramHelper";
 
-const ModalStyled = styled.div `
+const DivModalStyled = styled.div `
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,7 +13,10 @@ const ModalStyled = styled.div `
     height: 100%;
     bottom: 100%;
     
-    z-index: 10000;
+    /* z-index: 10000; */
+
+    z-index: ${({ zindex }) => zindex ? zindex : 10000};
+
     transition: all .5s ease-in-out;
     overflow: auto;
     
@@ -28,7 +31,7 @@ const ModalStyled = styled.div `
     .dialog {
         width: 500px;
         position: relative;
-        background: #dddd;
+        background: ${SECONDARY_COLOR};
         border-radius: 5px;
     };
 
@@ -43,24 +46,14 @@ const ModalStyled = styled.div `
 `;
 
 const Modal = {
-    ForForm: ({isOpen, closeModal, children}) => {
+    Form: ({isOpen, closeModal, children, ...modalProps}) => {
         return ReactDOM.createPortal(
-            <ModalStyled className={isOpen && 'open form'}>
+            <DivModalStyled className={isOpen && 'open form'} {...modalProps}>
                 <div className="dialog ">
-                    <Icon.Basic family="close" action={closeModal} right="10px" top="10px" hover/>
+                    <Icon.Basic family="close" onClick={closeModal} right="10px" top="10px" size="30px" hover/>
                     {children}
                 </div>
-            </ModalStyled>, document.getElementById("root-modal")
-        );
-    },
-    ForMessage: ({isOpen, closeModal, children}) => {
-        return ReactDOM.createPortal(
-            <ModalStyled className={isOpen && 'open'}>
-                <div className="dialog">
-                <Icon.Basic family="close" action={closeModal} right="10px" top="10px" hover/>
-                    {children}
-                </div>
-            </ModalStyled>, document.getElementById("root-modal")
+            </DivModalStyled>, document.getElementById("root-modal")
         );
     }
 };

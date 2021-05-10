@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import { PRIMARY_COLOR } from "../../helpers/paramHelper";
 
 const LoadingStyled = styled.div `
     border: 6px solid #f3f3f3;
     border-radius: 50%;
-    border-top: 6px solid #ced922;
+    border-top: 6px solid ${PRIMARY_COLOR};
     width: 40px;
     height: 40px;
     -webkit-animation: spin 2s linear infinite; /* Safari */

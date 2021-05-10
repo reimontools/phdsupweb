@@ -48,9 +48,9 @@ const ContainerStyled = styled.div `
 const ContainerBasicStyled = styled.div `
     width: ${({ width }) => width ? width : '100%'};
     padding: 10px;
-    @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
-        width: 90%;
-    };
+    /* @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
+        width: 100%;
+    }; */
 `;
 
 const ContainerFlex = styled.div `
@@ -58,6 +58,15 @@ const ContainerFlex = styled.div `
     align-items: center;
     justify-content: ${({ flexJustifyContent }) => flexJustifyContent ? flexJustifyContent : 'center'};
     margin: ${({ margin }) => margin ? margin : '0'};
+`;
+
+const ContainerFlexWrap = styled.div `
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
 `;
 
 const ContainerOverlay = styled.div `
@@ -68,7 +77,11 @@ const ContainerOverlay = styled.div `
     width: 100vw;
     height: 100%;
     bottom: 0;
-    background-color: ${({ backgroundColor }) => backgroundColor ? backgroundColor : '#00000000'};
+    /* background-color: ${({ backgroundColor }) => backgroundColor ? backgroundColor : '#00000000'}; */
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    
     z-index: 10000;
     overflow: auto;
     transition: all .5s ease-in-out;
@@ -108,6 +121,13 @@ const Container = {
             </ContainerFlex>
         );
     },
+    FlexWrap: ({children, ...props}) => {
+        return (
+            <ContainerFlexWrap {...props}>
+                {children}
+            </ContainerFlexWrap>
+        );
+    },
     Dialog: ({children, ...props}) => {
         return (
             <ContainerDialog {...props}>
@@ -122,7 +142,6 @@ const Container = {
             </ContainerOverlay>
         );
     },
-
     Primary: ({children}) => {
         return (
             <ContainerStyled>

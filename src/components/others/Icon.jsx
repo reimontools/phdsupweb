@@ -24,12 +24,10 @@ const DivIconStyled = styled.div `
 `;
 
 const Icon = {
-    Basic: ({action, ...props}) => {
+    Basic: ({...iconProps}) => {
         return (
-            <DivIconStyled 
-                {...props} 
-                onClick={action} > 
-                { getIconByFamily(props.family) }
+            <DivIconStyled {...iconProps}> 
+                {getIconByFamily(iconProps.family)}
             </DivIconStyled>
         );
     }
