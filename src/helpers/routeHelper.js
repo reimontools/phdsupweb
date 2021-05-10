@@ -5,7 +5,7 @@ import Home from '../components/views/Home';
 import Dashboard from '../components/views/Dashboard';
 import SignIn from '../components/views/SignIn';
 import SignUp from '../components/views/SingUp';
-import User from '../components/views/User';
+import Person from '../components/views/Person';
 import NotFound from '../components/views/NotFound';
 
 export const ROUTES = [
@@ -26,9 +26,9 @@ export const ROUTES = [
         auth: 'auth'
     },
     {
-        title: 'Users',
-        path: '/user',
-        component: User, 
+        title: 'Person',
+        path: '/person',
+        component: Person, 
         allowTo: ['Admin'],
         showInBar: true,
         auth: 'auth'

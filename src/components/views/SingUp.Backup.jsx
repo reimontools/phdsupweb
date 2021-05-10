@@ -15,6 +15,8 @@ const SignUp = () => {
     const phdCurrentYearList = useList("list/phd-current-year");
     const phdFinishYearList = useList("list/phd-finish-year");
     const countryList = useList("list/country");
+    const universityList = useList("list/university");
+    const researchAreaList = useList("list/research-area");
     
     /*VALIDATIONS ####################################################################################*/ 
     const lowercaseRegex = /(?=.*[a-z])/;
@@ -36,6 +38,10 @@ const SignUp = () => {
             .lowercase()
             .email("Must be a valid email !"),
         country_id: Yup.string()
+            .required('Required!'),
+        university_id: Yup.string()
+            .required('Required!'),
+        research_area_id: Yup.string()
             .required('Required!'),
         phd_year_id: Yup.string()
             .required('Required!'),
@@ -60,7 +66,7 @@ const SignUp = () => {
     /*CRUD ###########################################################################################*/ 
     const SignUp = async data => {
         try {
-            const res = await axios.post("signup", data);
+            const res = await axios.post("user", {user_id: 0, ...data});
             switch(res.data.result.cod) {
                 case 0:
                     setDialogOptions({family: "info", title: 'Success', text : 'User was submited!'})
@@ -90,6 +96,8 @@ const SignUp = () => {
             <Input.Validation name="email" label="Email *" placeholder="example@gmail.com" register={register} error={errors.email} />
             <Input.Validation name="mobile_number" label="Mobile number" placeholder="+569 98416398" register={register} error={errors.mobile} />
             <Select.Validation name="country_id" label="Country *" placeholder="Select a country" register={register} content={countryList} error={errors.country_id}/>
+            <Select.Validation name="university_id" label="University *" placeholder="Select a university" register={register} content={universityList} error={errors.university_id}/>
+            <Select.Validation name="research_area_id" label="Research area *" placeholder="Select a research area" register={register} content={researchAreaList} error={errors.research_area_id}/>
             <Check.Basic name="is_phd_finish" label="Did you finish your PhD?" register={register} />
             {isFinishPhd 
                 ? <Select.Validation name="phd_year_id" label="In which year did you finish?" placeholder="Select a year" register={register} content={phdFinishYearList} error={errors.phd_year_id}/>

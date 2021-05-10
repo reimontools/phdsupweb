@@ -3,7 +3,7 @@ export {default as Routes} from "./components/Routes";
 
 export {default as Home} from "./components/views/Home";
 export {default as SignIn} from "./components/views/SignIn";
-export {default as User} from "./components/views/User";
+export {default as User} from "./components/views/Person";
 export {default as NotFound} from "./components/views/NotFound";
 
 export {default as NavBar} from "./components/header/NavBar";
