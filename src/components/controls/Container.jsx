@@ -16,6 +16,14 @@ const ContainerLabelStyled = styled.div `
     }
 `;
 
+const ContainerNoRowsStyled = styled.div `
+    display: flex;
+    justify-content: flex-start;
+    height: auto;
+    margin: 15px 10px 15px 10px;
+    font-size: 14px;
+`;
+
 const ContainerStyled = styled.div `
     display: flex;
     flex-direction: column;
@@ -154,6 +162,13 @@ const Container = {
             <ContainerLabelStyled>
                 {children}
             </ContainerLabelStyled>
+        );
+    },
+    NoRows: ({children}) => {
+        return (
+            <ContainerNoRowsStyled>
+                {children}
+            </ContainerNoRowsStyled>
         );
     },
     Table: ({children}) => {

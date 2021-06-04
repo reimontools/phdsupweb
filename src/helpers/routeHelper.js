@@ -1,12 +1,14 @@
 import {Redirect, Route} from "react-router-dom";
 import useAppContext from '../hooks/useAppContext';
 
-import Home from '../components/views/Home';
-import Dashboard from '../components/views/Dashboard';
-import SignIn from '../components/views/SignIn';
-import SignUp from '../components/views/SingUp';
-import Person from '../components/views/Person';
-import NotFound from '../components/views/NotFound';
+import Person from '../components/views/person/Person';
+import Supervisor from '../components/views/supervisor/Supervisor';
+import SignIn from '../components/views/sign-in/SignIn';
+import SignUp from '../components/views/sign-up/SingUp';
+
+import Home from '../components/views/others/Home';
+import Dashboard from '../components/views/others/Dashboard';
+import NotFound from '../components/views/others/NotFound';
 
 export const ROUTES = [
     {
@@ -18,8 +20,16 @@ export const ROUTES = [
         auth: 'all'
     },
     {
+        title: 'Supervisors',
+        path: '/supervisor',
+        component: Supervisor, 
+        allowTo: ['Admin'],
+        showInBar: true,
+        auth: 'auth'
+    },
+    {
         title: 'Dashboard',
-        path: '/Dashboard',
+        path: '/dashboard',
         component: Dashboard, 
         allowTo: ['User'],
         showInBar: true,

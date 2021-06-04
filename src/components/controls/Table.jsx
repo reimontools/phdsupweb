@@ -30,20 +30,24 @@ const TableStyled = styled.table `
         padding: 8px;
         text-align: center;   
     };
+
     tbody tr:hover td {
         background-color: #dddd;
         cursor: pointer;
     };
+
     .td-container {
         display: flex;
         align-items: center; 
-        justify-content: space-evenly;
+        justify-content: center;
+    };
+
+    .dropdown {
+        display: none;
     };
 
     @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
         color: #222;
-        border-collapse: separate; 
-        border-spacing: 0 10px; 
 
         thead {
             display: none;
@@ -51,9 +55,20 @@ const TableStyled = styled.table `
 
         .head {
             display:flex;
-            font-weight: 600;
+            justify-content: space-between;
+            align-items: center; 
             font-size: 15px;
             color: ${PRIMARY_COLOR};
+        };
+
+        .avatar-container {
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+        };
+
+        .dropdown {
+            display: flex;
         };
 
         .content {
@@ -71,8 +86,7 @@ const TableStyled = styled.table `
         };
 
         .td-container {
-            justify-content: space-around;
-            width: 100%;
+            display: none;
         };
 
         tbody tr td {
@@ -90,12 +104,15 @@ const TableStyled = styled.table `
         };
 
         tbody tr td:first-child {
-            border-bottom: solid 1px #66316563;
+            border-bottom: ${({ borderBottom }) => borderBottom ? borderBottom : 'solid 1px #dddd'};
         };
 
         tbody tr:hover td {
             background-color: transparent;
         };
+
+        
+
     };
 `;
 

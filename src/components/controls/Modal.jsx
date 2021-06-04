@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import { Icon} from "../../component";
+import { ButtonCircle } from "../../component";
 import { MEDIUM_SCREEN_SIZE_PX, SECONDARY_COLOR } from "../../helpers/paramHelper";
 
 const DivModalStyled = styled.div `
@@ -29,7 +29,8 @@ const DivModalStyled = styled.div `
     };
 
     .dialog {
-        width: 500px;
+        width: 700px;
+        width: ${({ width }) => width ? width : "500px"};
         position: relative;
         background: ${SECONDARY_COLOR};
         border-radius: 5px;
@@ -50,7 +51,7 @@ const Modal = {
         return ReactDOM.createPortal(
             <DivModalStyled className={isOpen && 'open form'} {...modalProps}>
                 <div className="dialog ">
-                    <Icon.Basic family="close" onClick={closeModal} right="10px" top="10px" size="30px" hover/>
+                    <ButtonCircle.Icon family="close" onClick={closeModal} right="5px" top="5px" />
                     {children}
                 </div>
             </DivModalStyled>, document.getElementById("root-modal")

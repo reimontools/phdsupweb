@@ -1,25 +1,30 @@
 export {default as App} from "./components/App";
 export {default as Routes} from "./components/Routes";
-
-export {default as Home} from "./components/views/Home";
-export {default as SignIn} from "./components/views/SignIn";
-export {default as User} from "./components/views/Person";
-export {default as NotFound} from "./components/views/NotFound";
-
 export {default as NavBar} from "./components/header/NavBar";
 export {default as Header} from "./components/header/Header";
 export {default as Logo} from "./components/header/Logo";
 export {default as Burger} from "./components/header/Burger";
-export {default as Loading} from "./components/others/Loading";
-export {default as Modal} from "./components/others/Modal";
-export {default as Title} from "./components/others/Title";
-export {default as Check} from "./components/others/Check";
+export {default as Loading} from "./components/controls/Loading";
 
-export {default as Dialog} from "./components/others/Dialog";
-export {default as Card} from "./components/others/Card";
-export {default as Input} from "./components/others/Input";
-export {default as Select} from "./components/others/Select";
-export {default as Button} from "./components/others/Button";
-export {default as Icon} from "./components/others/Icon";
-export {default as Table} from "./components/others/Table";
-export {default as Container} from "./components/others/Container";
+export {default as Link} from "./components/controls/Link";
+export {default as Modal} from "./components/controls/Modal";
+export {default as Title} from "./components/controls/Title";
+export {default as Check} from "./components/controls/Check";
+export {default as DropDown} from "./components/controls/DropDown";
+export {default as DropDownButtonFloat} from "./components/controls/DropDownButtonFloat";
+export {default as ButtonFloat} from "./components/controls/ButtonFloat";
+export {default as Avatar} from "./components/controls/Avatar";
+export {default as ButtonCircle} from "./components/controls/ButtonCircle";
+export {default as Dialog} from "./components/controls/Dialog";
+export {default as Card} from "./components/controls/Card";
+export {default as Input} from "./components/controls/Input";
+export {default as Select} from "./components/controls/Select";
+export {default as Button} from "./components/controls/Button";
+export {default as Icon} from "./components/controls/Icon";
+export {default as Table} from "./components/controls/Table";
+export {default as Container} from "./components/controls/Container";
+
+export {default as SupervisorUniversity} from "./components/views/supervisor/supervisor-university/SupervisorUniversity";
+export {default as PersonSupervisor} from "./components/views/person/person-supervisor/PersonSupervisor";
+export {default as CrudSupervisorUniversity} from "./components/views/supervisor/supervisor-university/CrudSupervisorUniversity";
+export {default as CrudPersonSupervisor} from "./components/views/person/person-supervisor/CrudPersonSupervisor";

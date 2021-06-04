@@ -1,10 +1,10 @@
 
 import { useForm } from "react-hook-form";
-import { Input, Title, Container, Button } from "../../component";
+import { Input, Title, Container, Button } from "../../../component";
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from '../../config/axios';
-import useAppContext from "../../hooks/useAppContext";
+import axios from '../../../config/axios';
+import useAppContext from "../../../hooks/useAppContext";
 
 const SignIn = () => {
     // const defaultData = {email: '', password: ''};

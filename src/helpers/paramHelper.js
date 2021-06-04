@@ -1,12 +1,13 @@
 // npm install react-icons --save
 import { BiEdit } from "react-icons/bi";
 import { GoPlus } from "react-icons/go";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdMoreVert } from "react-icons/md";
 import { RiAliensLine } from "react-icons/ri";
 import { BiTrash } from "react-icons/bi";
-import { IoMdPersonAdd , IoMdSearch} from "react-icons/io";
+import { IoMdPersonAdd , IoMdSearch, IoIosAdd, IoIosArrowRoundBack, IoIosMore } from "react-icons/io";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { FaCheck, FaCheckDouble } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 
 export const SMALL_SCREEN_SIZE = 500;
 export const MEDIUM_SCREEN_SIZE = 768;
@@ -22,7 +23,7 @@ export const SECONDARY_COLOR = "#fff";
 
 export const getColorByFamily = family => {
     switch(family) {
-        case "close": return "#666666";
+        case "close": return PRIMARY_COLOR;
         case "add": return "#CED922";
         case "addPerson": return "#CED922";
         case "check": return "#ced922";
@@ -34,13 +35,20 @@ export const getColorByFamily = family => {
         case "remove": return PRIMARY_COLOR;
         case "search": return "#0D5F1B";
         case "password": return PRIMARY_COLOR;
+        case "more": return PRIMARY_COLOR;
+        case "new": return PRIMARY_COLOR;
+        
+        case "newFloat": return PRIMARY_COLOR;
+        case "backFloat": return "#959595";
+        case "moreFloat": return "#0e70b8";
+
         default: return PRIMARY_COLOR
     };
 };
 
 export const getIconByFamily = family => {
     switch(family) {
-        case "close": return <MdClose />;
+        case "close": return <IoClose />;
         case "add": return <GoPlus />;
         case "addPerson": return <IoMdPersonAdd />;
         case "check": return <FaCheck />;
@@ -51,6 +59,14 @@ export const getIconByFamily = family => {
         case "remove": return <MdClose />;
         case "search": return <IoMdSearch />;
         case "password": return <RiLockPasswordLine />;
+        case "more": return <MdMoreVert />;
+        case "new": return  <IoIosAdd />;
+
+        case "newFloat": return  <IoIosAdd />;
+        case "backFloat": return <IoIosArrowRoundBack />;
+        case "moreFloat": return <IoIosMore />;
+
+
         default: return <RiAliensLine />
     };
 };
