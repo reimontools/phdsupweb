@@ -1,8 +1,8 @@
 import {Redirect, Route} from "react-router-dom";
 import useAppContext from '../hooks/useAppContext';
 
-import Person from '../components/views/person/Person';
-import Supervisor from '../components/views/supervisor/Supervisor';
+import ListPerson from '../components/views/person/ListPerson';
+import ListSupervisor from '../components/views/supervisor/ListSupervisor';
 import SignIn from '../components/views/sign-in/SignIn';
 import SignUp from '../components/views/sign-up/SingUp';
 
@@ -22,7 +22,7 @@ export const ROUTES = [
     {
         title: 'Supervisors',
         path: '/supervisor',
-        component: Supervisor, 
+        component: ListSupervisor, 
         allowTo: ['Admin'],
         showInBar: true,
         auth: 'auth'
@@ -38,7 +38,7 @@ export const ROUTES = [
     {
         title: 'Person',
         path: '/person',
-        component: Person, 
+        component: ListPerson, 
         allowTo: ['Admin'],
         showInBar: true,
         auth: 'auth'

@@ -173,9 +173,9 @@ export default function PersonSupervisorU() {
 
     const renderDropDown = personSupervisor => {
         return (
-            <DropDown.Basic family="more">
-                <div className="menu-content" onClick={e => handleDelete(e, personSupervisor)}>Delete</div>
-            </DropDown.Basic>
+            <DropDown.ButtonIcon family="more">
+                <div onClick={e => handleDelete(e, personSupervisor)}>Delete</div>
+            </DropDown.ButtonIcon>
         );
     };
 

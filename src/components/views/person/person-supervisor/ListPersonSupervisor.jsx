@@ -3,7 +3,7 @@ import { Table, Container, Title, Modal, Avatar, DropDown, CrudPersonSupervisor,
 import useModal from "../../../../hooks/useModal";
 import axios from '../../../../config/axios'
 
-const PersonSupervisor = {
+const ListPersonSupervisor = {
     Basic: ({person_id, fetch, personSupervisors, isOpen, close}) => {
         // STATE ########################################################################################################################################
         const [currentPersonSupervisor, setCurrentPersonSupervisor] = useState({});
@@ -109,10 +109,10 @@ const PersonSupervisor = {
 
         const renderDropDown = personSupervisor => {
             return (
-                <DropDown.Basic family="more">
-                    <div className="menu-content" onClick={e => handleUpdate(e, personSupervisor)}>Update</div>
-                    <div className="menu-content" onClick={e => handleDelete(e, personSupervisor)}>Delete</div>
-                </DropDown.Basic>
+                <DropDown.ButtonIcon family="more">
+                    <div onClick={e => handleUpdate(e, personSupervisor)}>Update</div>
+                    <div onClick={e => handleDelete(e, personSupervisor)}>Delete</div>
+                </DropDown.ButtonIcon>
             );
         };
 
@@ -144,4 +144,4 @@ const PersonSupervisor = {
     }
 };
 
-export default PersonSupervisor
+export default ListPersonSupervisor

@@ -21,10 +21,14 @@ export {default as Input} from "./components/controls/Input";
 export {default as Select} from "./components/controls/Select";
 export {default as Button} from "./components/controls/Button";
 export {default as Icon} from "./components/controls/Icon";
+export {default as Simbol} from "./components/controls/Simbol";
 export {default as Table} from "./components/controls/Table";
 export {default as Container} from "./components/controls/Container";
 
-export {default as SupervisorUniversity} from "./components/views/supervisor/supervisor-university/SupervisorUniversity";
-export {default as PersonSupervisor} from "./components/views/person/person-supervisor/PersonSupervisor";
+export {default as CrudSupervisor} from "./components/views/supervisor/CrudSupervisor";
+export {default as CrudPerson} from "./components/views/person/CrudPerson";
+export {default as CrudConcre} from "./components/views/person/CrudConcre";
+export {default as ListSupervisorUniversity} from "./components/views/supervisor/supervisor-university/ListSupervisorUniversity";
+export {default as ListPersonSupervisor} from "./components/views/person/person-supervisor/ListPersonSupervisor";
 export {default as CrudSupervisorUniversity} from "./components/views/supervisor/supervisor-university/CrudSupervisorUniversity";
 export {default as CrudPersonSupervisor} from "./components/views/person/person-supervisor/CrudPersonSupervisor";

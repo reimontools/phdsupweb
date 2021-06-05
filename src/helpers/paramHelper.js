@@ -37,7 +37,8 @@ export const getColorByFamily = family => {
         case "password": return PRIMARY_COLOR;
         case "more": return PRIMARY_COLOR;
         case "new": return PRIMARY_COLOR;
-        
+        case "alert": return "red";
+
         case "newFloat": return PRIMARY_COLOR;
         case "backFloat": return "#959595";
         case "moreFloat": return "#0e70b8";

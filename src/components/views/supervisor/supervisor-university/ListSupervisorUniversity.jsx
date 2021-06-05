@@ -3,7 +3,7 @@ import { Table, Container, Title, Modal, Avatar, DropDown, CrudSupervisorUnivers
 import useModal from "../../../../hooks/useModal";
 import axios from '../../../../config/axios'
 
-const SupervisorUniversity = {
+const ListSupervisorUniversity = {
     Basic: ({supervisor_id, fetch, supervisorUniversities, isOpen, close}) => {
         // STATE ########################################################################################################################################
         const [currentSupervisorUniversity, setCurrentSupervisorUniversity] = useState({});
@@ -113,10 +113,10 @@ const SupervisorUniversity = {
 
         const renderDropDown = supervisorUniversity => {
             return (
-                <DropDown.Basic family="more">
-                    <div className="menu-content" onClick={e => handleUpdate(e, supervisorUniversity)}>Update</div>
-                    <div className="menu-content" onClick={e => handleDelete(e, supervisorUniversity)}>Delete</div>
-                </DropDown.Basic>
+                <DropDown.ButtonIcon family="more">
+                    <div onClick={e => handleUpdate(e, supervisorUniversity)}>Update</div>
+                    <div onClick={e => handleDelete(e, supervisorUniversity)}>Delete</div>
+                </DropDown.ButtonIcon>
             );
         };
 
@@ -148,4 +148,4 @@ const SupervisorUniversity = {
     }
 };
 
-export default SupervisorUniversity;
+export default ListSupervisorUniversity;

@@ -4,12 +4,12 @@ import { PRIMARY_COLOR, MEDIUM_SCREEN_SIZE_PX, getColorByFamily, getIconByFamily
 const MenuStyled = styled.div `
     z-index: 10000;
     position: absolute;
-    top: 5px;
-    right: 43px;
+    top: 50px;
+    left: -160px;
     width: 150px;
     background-color: ${PRIMARY_COLOR};
     border-radius: 10px;
-    transition: 0.5s;
+    transition: 200ms;
     visibility: hidden;
     opacity: 0;
     padding:5px;
@@ -25,49 +25,47 @@ const MenuStyled = styled.div `
         background: ${PRIMARY_COLOR};
         transform: rotate(45deg);
     };
-    /* @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
-        right: 43px;
-    }; */
-`;
-
-const ContainerStyled = styled.div `
-    position: relative;
-    display: flex;
-    align-items: center; 
-    justify-content: center;
-    /* transition: all 300ms ease; */
-    &:hover ${MenuStyled} {
-        top: -5px;
-        visibility: visible;
-        opacity: 1;
-    };
-    .menu-content {
+    div {
+        display: flex;
+        align-items: center; 
+        justify-content: flex-start;
         color: white;
         width: 100%;
         padding: 10px 0 10px 10px;
-        text-align: left;
+        /* text-align: left; */
+        font-size: 14px;
         &:hover {
             background-color: #773e76;
         };
     };
 `;
 
-const ButtonStyled = styled.div `
+const ContainerStyled = styled.div `
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+`;
+
+const ButtonIconStyled = styled.div `
+    position: relative;
     display: flex;
     align-items: center; 
     justify-content: center;
     width: 33px;
     height: 33px;
     border-radius: 100%;
-    /* background-color: white; */
     font-size: 23px;
     color: ${({ family }) => getColorByFamily(family)};
-    transition: all 300ms ease;
+    transition: all 200ms ease;
     cursor: pointer;
+    &:hover ${MenuStyled} {
+        top: -5px;
+        visibility: visible;
+        opacity: 1;
+    };
     &:hover {
         background-color: ${({ family }) => getColorByFamily(family)};
         color: white;
-        /* transform: scale(1.1); */
     };
     @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
         &:hover {
@@ -76,14 +74,45 @@ const ButtonStyled = styled.div `
     };
 `;
 
+const ButtonTextStyled = styled.button `
+    position: relative;
+    padding: 5px;
+    background: ${({ family }) => getColorByFamily(family)};
+    font-size: 12px;
+    color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    transition: .1s ease all;
+    cursor: pointer;
+    &:hover ${MenuStyled} {
+        top: -9px;
+        visibility: visible;
+        opacity: 1;
+    };
+`;
+
 const DropDown = {
-    Basic: ({children, ...dropDownProps}) => {
+    ButtonIcon: ({children, ...dropDownProps}) => {
         return ( 
             <ContainerStyled {...dropDownProps}>
-                <ButtonStyled onClick={e => e.stopPropagation()}>
+                <ButtonIconStyled onClick={e => e.stopPropagation()}>
                     {getIconByFamily(dropDownProps.family)}
-                </ButtonStyled>
-                <MenuStyled>{children}</MenuStyled>
+                    <MenuStyled>
+                        {children}
+                    </MenuStyled>
+                </ButtonIconStyled>
+            </ContainerStyled>
+        );
+    },
+    ButtonText: ({children, ...dropDownProps}) => {
+        return ( 
+            <ContainerStyled {...dropDownProps}>
+                <ButtonTextStyled onClick={e => e.stopPropagation()}>
+                    {dropDownProps.text}
+                    <MenuStyled>{children}</MenuStyled>
+                </ButtonTextStyled>
+                
             </ContainerStyled>
         );
     }

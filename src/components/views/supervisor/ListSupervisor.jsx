@@ -1,14 +1,10 @@
 import { useState, useEffect} from "react";
-import { useForm } from "react-hook-form";
-import { Table, Loading, Container, Dialog, Modal, Title, Button, Input, DropDown, Avatar, ButtonFloat, SupervisorUniversity, Link } from "../../../component";
-import * as Yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Table, Loading, Container, Dialog, Title, Button, DropDown, Avatar, ButtonFloat, ListSupervisorUniversity, Link, CrudSupervisor } from "../../../component";
 import { getList } from '../../../helpers/listHelper';
 import useModal from "../../../hooks/useModal";
-// import useList from '../../hooks/useList';
 import axios from '../../../config/axios'
 
-const Supervisor = () => {
+const ListSupervisor = () => {
     
     // CONST ########################################################################################################################################
     const defaultSupervisor = {supervisor_id: 0, supervisor_name: "", supervisor_surname: "", supervisor_orcid_web: "", supervisor_research_web: "", supervisor_academic_web: ""};
@@ -21,42 +17,12 @@ const Supervisor = () => {
     const [supervisorUniversities, setSupervisorUniversities] = useState([]);
 
     // MODAL ########################################################################################################################################
-    const [isOpenModalCrud, openModalCrud, closeModalCrud] = useModal();
+    // const [isOpenModalCrud, openModalCrud, closeModalCrud] = useModal();
     const [isOpenModalSupervisorUniversity, openModalSupervisorUniversity, closeModalSupervisorUniversity] = useModal();  
-
-    // LIST #########################################################################################################################################
-    // const phdCurrentYearList = useList("list/phd-current-year");
-    // const phdFinishYearList = useList("list/phd-finish-year");
-    // const countryList = useList("list/country");
-
+    const [isOpenModalCrudSupervisor, openModalCrudSupervisor, closeModalCrudSupervisor] = useModal();  
+    
     // EFFECT #######################################################################################################################################
     useEffect(() => fetchSupervisors(), []);
-
-    // CRUD VALIDATIONS #############################################################################################################################
-    const schemaCrud = Yup.object().shape({
-        supervisor_name: Yup.string()
-            .required('Required!')
-            .min(2, "Too short!")
-            .max(100, "Too long!"),
-        supervisor_surname: Yup.string()
-            .required('Required!')
-            .min(2, "Too short!")
-            .max(100, "Too long!"),
-        supervisor_orcid_web: Yup.string()
-            .url("Must be a valid url!")
-            .max(500, "Too long!"),
-        supervisor_research_web: Yup.string()
-            .url("Must be a valid url!")
-            .max(500, "Too long!"),
-        supervisor_academic_web: Yup.string()
-            .url("Must be a valid url!")
-            .max(500, "Too long!")
-    });
-
-    const { register: registerCrud, handleSubmit: handleSubmitCrud, errors: errorsCrud, reset: resetCrud } = useForm({
-        mode: 'onBlur',
-        resolver: yupResolver(schemaCrud)
-    });
 
     // FETCHS #######################################################################################################################################
     const fetchSupervisors = async () => {
@@ -76,33 +42,9 @@ const Supervisor = () => {
         fetchSupervisorUniversities(supervisor_id);
     };
 
-    // CRUD #########################################################################################################################################
-    const updateSupervisor = async data => {
+    const updateSupervisorIsActive = async supervisor_id => {
         try {
-            const res = await axios.post("supervisor", {supervisor_id: currentSupervisor.supervisor_id, ...data});
-            switch(res.data.result.cod) {
-                case 0:
-                    fetchSupervisors();
-                    closeModalCrud();
-                    break;
-                case 1:
-                    setDialogOptions({family: "info", title: 'Alert', text : 'Supervisor already exists!'})
-                    break;
-                case 2:
-                    setDialogOptions({family: "info", title: 'Alert', text : 'Supervisor already exists! (nonActive)'})
-                    break;
-                default:
-                    setDialogOptions({family: "info", title: 'Error', text : 'Error: ' + res.data.result.msg})
-                    break;
-            };
-        } catch(err) {
-            console.log('Err: ' + err);
-        };
-    };
-
-    const updateSupervisorIsActive = async id => {
-        try {
-            const res = await axios.put("supervisor/" + id);
+            const res = await axios.put("supervisor/" + supervisor_id);
             if (!res.data.error) {
                 fetchSupervisors();
             };
@@ -128,8 +70,7 @@ const Supervisor = () => {
     const handleUpdate = (e, supervisor) => {
         e.stopPropagation();
         setcurrentSupervisor(supervisor);
-        resetCrud(supervisor);
-        openModalCrud();
+        openModalCrudSupervisor();
     };
 
     const handleButtonUniversities = (e, supervisor) => {
@@ -196,10 +137,10 @@ const Supervisor = () => {
 
     const renderDropDown = supervisor => {
         return (
-            <DropDown.Basic family="more">
-                <div className="menu-content" onClick={e => handleUpdate(e, supervisor)}>Update</div>
-                <div className="menu-content" onClick={e => handleDelete(e, supervisor)}>Delete</div>
-            </DropDown.Basic>
+            <DropDown.ButtonIcon family="more">
+                <div onClick={e => handleUpdate(e, supervisor)}>Update</div>
+                <div onClick={e => handleDelete(e, supervisor)}>Delete</div>
+            </DropDown.ButtonIcon>
         );
     };
 
@@ -234,27 +175,21 @@ const Supervisor = () => {
                 </Container.Table>
             }
 
-            {/* MODAL CRUD ########################################################################################################################## */}
-            <Modal.Form isOpen={isOpenModalCrud} closeModal={closeModalCrud}>
-                <Container.Basic>
-                    <Title.Basic>Supervisor</Title.Basic>
-                    <Input.Validation name="supervisor_name" label="Name *" placeholder="Set supervisor name" register={registerCrud} error={errorsCrud.supervisor_name} />
-                    <Input.Validation name="supervisor_surname" label="Surname *" placeholder="Set supervisor surname" register={registerCrud} error={errorsCrud.supervisor_surname} />
-                    <Input.Validation name="supervisor_orcid_web" label="Orcid Number Link" placeholder="Set supervisor Orcid Number Link" register={registerCrud} error={errorsCrud.supervisor_orcid_web} />
-                    <Input.Validation name="supervisor_research_web" label="Researchgate Website" placeholder="Set supervisor Researchgate Website" register={registerCrud} error={errorsCrud.supervisor_research_web} />
-                    <Input.Validation name="supervisor_academic_web" label="Academic Google" placeholder="Set supervisor Academic Google" register={registerCrud} error={errorsCrud.supervisor_academic_web} />
-                    <Button.Basic onClick={handleSubmitCrud(updateSupervisor)}>Save</Button.Basic>
-                </Container.Basic>
-            </Modal.Form>
-
             {/* NEW  ################################################################################################################################ */}
             <ButtonFloat.Icon onClick={e => handleUpdate(e, defaultSupervisor)} hover family="newFloat"/>
             
             {/* DIALOG ############################################################################################################################## */}
             <Dialog.Action options={ dialogOptions } close={() => setDialogOptions({})} />
 
+            {/* CRUD SUPERVISOR UNIVERSITY  ######################################################################################################### */}
+            <CrudSupervisor.Basic 
+                fetch={fetchSupervisors} 
+                supervisor={currentSupervisor} 
+                isOpen={isOpenModalCrudSupervisor} 
+                close={closeModalCrudSupervisor} /> 
+
             {/* SUPERVISOR UNIVERSITY MODAL ######################################################################################################### */}
-            <SupervisorUniversity.Basic 
+            <ListSupervisorUniversity.Basic 
                 supervisor_id={currentSupervisor.supervisor_id} 
                 fetch={fetchAll} 
                 supervisorUniversities={supervisorUniversities} 
@@ -265,4 +200,4 @@ const Supervisor = () => {
     );  
 };
 
-export default Supervisor;
+export default ListSupervisor;
