@@ -1,16 +1,35 @@
 import {Redirect, Route} from "react-router-dom";
 import useAppContext from '../hooks/useAppContext';
 
-import ListPerson from '../components/views/person/ListPerson';
-import ListSupervisor from '../components/views/supervisor/ListSupervisor';
+import PersonList from '../components/views/person/PersonList';
+import SupervisorList from '../components/views/supervisor/SupervisorList';
 import SignIn from '../components/views/sign-in/SignIn';
 import SignUp from '../components/views/sign-up/SingUp';
 
-import Home from '../components/views/others/Home';
-import Dashboard from '../components/views/others/Dashboard';
-import NotFound from '../components/views/others/NotFound';
+import Home from '../components/views/Home';
+import Dashboard from '../components/views/Dashboard';
+import NotFound from '../components/views/NotFound';
+
+import PersonSupervisorUniversityListNa from '../components/views/user-views/PersonSupervisorUniversityListNa';
+import PersonUniversityListNa from '../components/views/user-views/PersonUniversityListNa';
 
 export const ROUTES = [
+    {
+        title: 'My supervisors',
+        path: '/person-supervisor',
+        component: PersonSupervisorUniversityListNa, 
+        allowTo: ['User'],
+        showInBar: true,
+        auth: 'auth'
+    },
+    {
+        title: 'My university',
+        path: '/person-university',
+        component: PersonUniversityListNa, 
+        allowTo: ['User'],
+        showInBar: true,
+        auth: 'auth'
+    },
     {
         title: 'Home',
         path: '/',
@@ -22,7 +41,7 @@ export const ROUTES = [
     {
         title: 'Supervisors',
         path: '/supervisor',
-        component: ListSupervisor, 
+        component: SupervisorList, 
         allowTo: ['Admin'],
         showInBar: true,
         auth: 'auth'
@@ -38,7 +57,7 @@ export const ROUTES = [
     {
         title: 'Person',
         path: '/person',
-        component: ListPerson, 
+        component: PersonList, 
         allowTo: ['Admin'],
         showInBar: true,
         auth: 'auth'

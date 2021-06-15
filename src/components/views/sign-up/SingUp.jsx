@@ -1,68 +1,81 @@
 import { useForm } from "react-hook-form";
-import { Input, Container, Button, Check, Select, Dialog, Title } from "../../../component";
+import { Input, Container, Button, Select, Dialog, Title } from "../../../component";
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from "react";
 import axios from '../../../config/axios';
 import useList from '../../../hooks/useList';
+import { getCapitalInSentence, LOWERCASEREGEX, UPPERCASEREGEX, NUMERICREGEX } from "../../../helpers/paramHelper";
 
 const SignUp = () => {
+    // CONST ########################################################################################################################################
+    const defaultPerson = {person_name: "", person_surname: "", person_nickname: "", person_email: "", person_mobile_number: "", country_id: "", concre: "", concreConfirm: ""};
 
-    /*STATES #########################################################################################*/ 
+    // STATE #######################################################################################################################################
     const [dialogOptions, setDialogOptions] = useState({});
 
-    /*LIST ###########################################################################################*/ 
-    const phdCurrentYearList = useList("list/phd-current-year");
-    const phdFinishYearList = useList("list/phd-finish-year");
+    // LIST ######################################################################################################################################## 
     const countryList = useList("list/country");
     
-    /*VALIDATIONS ####################################################################################*/ 
-    const lowercaseRegex = /(?=.*[a-z])/;
-    const uppercaseRegex = /(?=.*[A-Z])/;
-    const numericRegex = /(?=.*[0-9])/;
-
-    const schema = Yup.object().shape({
-        name: Yup.string()
-            .required('Required !')
-            .min(2, "Too short!"),
-        surname: Yup.string()
+    // VALIDATIONS #################################################################################################################################
+    const schemaCrud = Yup.object().shape({
+        person_name: Yup
+            .string()
             .required('Required!')
-            .min(2, "Too short!"),
-        nickname: Yup.string()
+            .trim()
+            .min(2, "Too short!")
+            .max(50, "Too long!")
+            .transform(value => getCapitalInSentence(value)),
+        person_surname: Yup
+            .string()
             .required('Required!')
-            .min(4, "Too short!"),
-        email: Yup.string()
+            .trim()
+            .min(2, "Too short!")
+            .max(50, "Too long!")
+            .transform(value => getCapitalInSentence(value)),
+        person_nickname: Yup
+            .string()
+            .required('Required!')
+            .trim()
+            .min(3, "Too short!"),
+        person_email: Yup
+            .string()
             .required('Required!')
             .lowercase()
+            .trim()
             .email("Must be a valid email !"),
-        country_id: Yup.string()
+        person_mobile_number: Yup
+            .string()
+            .required('Required!')
+            .trim(),
+        country_id: Yup
+            .string()
             .required('Required!'),
-        phd_year_id: Yup.string()
-            .required('Required!'),
-        password: Yup.string()
+        concre: Yup
+            .string()
             .required('Required!')
             .min(8, "Minimun 8 characters required!")
-            .matches(numericRegex, 'One number required!')
-            .matches(lowercaseRegex, 'One lowercase required!')
-            .matches(uppercaseRegex, 'One uppercase required!'),
-        passwordConfirm: Yup.string()
+            .matches(NUMERICREGEX, 'One number required!')
+            .matches(LOWERCASEREGEX, 'One lowercase required!')
+            .matches(UPPERCASEREGEX, 'One uppercase required!'),
+        concreConfirm: Yup
+            .string()
             .required('Required!')
-            .oneOf([Yup.ref('password')], 'Password must be the same!')
+            .oneOf([Yup.ref('concre')], 'Password must be the same!')
     });
 
-    const { register, handleSubmit, errors, watch } = useForm({
+    const { register: registerCrud, handleSubmit: handleSubmitCrud, errors: errorsCrud, reset: resetCrud } = useForm({
         mode: 'onBlur',
-        resolver: yupResolver(schema)
+        resolver: yupResolver(schemaCrud)
     });
 
-    const isFinishPhd = watch("is_phd_finish");
-
-    /*CRUD ###########################################################################################*/ 
+    // CRUD #########################################################################################################################################
     const SignUp = async data => {
         try {
             const res = await axios.post("signup", data);
             switch(res.data.result.cod) {
                 case 0:
+                    resetCrud(defaultPerson);
                     setDialogOptions({family: "info", title: 'Success', text : 'User was submited!'})
                     break;
                 case 1:
@@ -80,25 +93,21 @@ const SignUp = () => {
         };
     };
     
-    /*JSX ############################################################################################*/ 
+    // JSX ##########################################################################################################################################
     return (
         <Container.Basic width="400px">
             <Title.Primary>Sign Up</Title.Primary>
-            <Input.Validation name="name" label="Name *" placeholder="Set your name" register={register} error={errors.name} />
-            <Input.Validation name="surname" label="Surname *" placeholder="Set your surname" register={register} error={errors.surname} />
-            <Input.Validation name="nickname" label="Nickname *" placeholder="Set your nickname" register={register} error={errors.nickname} />
-            <Input.Validation name="email" label="Email *" placeholder="example@gmail.com" register={register} error={errors.email} />
-            <Input.Validation name="mobile_number" label="Mobile number" placeholder="+569 98416398" register={register} error={errors.mobile} />
-            <Select.Validation name="country_id" label="Country *" placeholder="Select a country" register={register} content={countryList} error={errors.country_id}/>
-            <Check.Basic name="is_phd_finish" label="Did you finish your PhD?" register={register} />
-            {isFinishPhd 
-                ? <Select.Validation name="phd_year_id" label="In which year did you finish?" placeholder="Select a year" register={register} content={phdFinishYearList} error={errors.phd_year_id}/>
-                : <Select.Validation name="phd_year_id" label=" In which year are you?" placeholder="Select a year" register={register} content={phdCurrentYearList} error={errors.phd_year_id}/>
-            }
-            <Input.Validation name="keywords" label="Keywords" placeholder="Mention at least 3" register={register} error={errors.keywords} />
-            <Input.Validation name="password" label="Password *" type="password" register={register} error={errors.password} />
-            <Input.Validation name="passwordConfirm" label="Confirm password *" type="password" register={register} error={errors.passwordConfirm} />
-            <Button.Basic onClick={handleSubmit(SignUp)}>Sign Up</Button.Basic>
+            <Input.Validation name="person_name" label="Name *" placeholder="Set your name" register={registerCrud} error={errorsCrud.person_name} />
+            <Input.Validation name="person_surname" label="Surname *" placeholder="Set your surname" register={registerCrud} error={errorsCrud.person_surname} />
+            <Input.Validation name="person_nickname" label="Nickname *" placeholder="Set your nickname" register={registerCrud} error={errorsCrud.person_nickname} />
+            <Input.Validation name="person_email" label="Email *" placeholder="example@gmail.com" register={registerCrud} error={errorsCrud.person_email} />
+            <Input.Validation name="person_mobile_number" label="Mobile number" placeholder="+569 98416398" register={registerCrud} error={errorsCrud.person_mobile_number} />
+            <Select.Validation name="country_id" label="Country *" placeholder="Select a country" register={registerCrud} content={countryList} error={errorsCrud.country_id}/>
+            <Input.Validation name="concre" label="Password *" type="password" placeholder="Set a password" register={registerCrud} error={errorsCrud.concre} />
+            <Input.Validation name="concreConfirm" label="Confirm password *" type="password" placeholder="Confirm it" register={registerCrud} error={errorsCrud.concreConfirm} />
+            <Button.Basic onClick={handleSubmitCrud(SignUp)}>Sign Up</Button.Basic>
+
+            {/* DIALOG ############################################################################################################################## */}
             <Dialog.Action options={dialogOptions} close={() => setDialogOptions({})} />
         </Container.Basic>
     );

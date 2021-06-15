@@ -24,11 +24,22 @@ export {default as Icon} from "./components/controls/Icon";
 export {default as Simbol} from "./components/controls/Simbol";
 export {default as Table} from "./components/controls/Table";
 export {default as Container} from "./components/controls/Container";
+export {default as Text} from "./components/controls/Text";
 
-export {default as CrudSupervisor} from "./components/views/supervisor/CrudSupervisor";
-export {default as CrudPerson} from "./components/views/person/CrudPerson";
-export {default as CrudConcre} from "./components/views/person/CrudConcre";
-export {default as ListSupervisorUniversity} from "./components/views/supervisor/supervisor-university/ListSupervisorUniversity";
-export {default as ListPersonSupervisor} from "./components/views/person/person-supervisor/ListPersonSupervisor";
-export {default as CrudSupervisorUniversity} from "./components/views/supervisor/supervisor-university/CrudSupervisorUniversity";
-export {default as CrudPersonSupervisor} from "./components/views/person/person-supervisor/CrudPersonSupervisor";
+// PERSON ###########################################################################################################################################
+export {default as PersonCrud} from "./components/views/person/PersonCrud";
+export {default as ConcreCrud} from "./components/views/concre/ConcreCrud";
+export {default as PersonUniversityList} from "./components/views/person/PersonUniversityList";
+export {default as PersonUniversityCrud} from "./components/views/person/PersonUniversityCrud";
+export {default as PersonSupervisorUniversityList} from "./components/views/person/PersonSupervisorUniversityList";
+export {default as PersonSupervisorUniversityCrud} from "./components/views/person/PersonSupervisorUniversityCrud";
+
+// SUPERVISOR #######################################################################################################################################
+export {default as SupervisorCrud} from "./components/views/supervisor/SupervisorCrud";
+export {default as SupervisorUniversityList} from "./components/views/supervisor/SupervisorUniversityList";
+export {default as SupervisorUniversityCrud} from "./components/views/supervisor/SupervisorUniversityCrud";
+
+// PERSON NA ########################################################################################################################################
+export {default as PersonSupervisorUniversityCrudNa} from "./components/views/user-views/PersonSupervisorUniversityCrudNa";
+export {default as PersonUniversityCrudNa} from "./components/views/user-views/PersonUniversityCrudNa";
+export {default as SupervisorCrudNa} from "./components/views/user-views/SupervisorCrudNa";

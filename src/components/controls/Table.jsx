@@ -72,7 +72,7 @@ const TableStyled = styled.table `
         };
 
         .content {
-            padding-left: 40%;
+            padding-left: 50%;
             display: flex;
             justify-content: flex-end;
         };
@@ -97,7 +97,7 @@ const TableStyled = styled.table `
             content: attr(data-label);
             position: absolute;
             left: 0;
-            width: 40%;
+            width: 50%;
             color: #222;
             padding-left: 8px;
             text-align: left;

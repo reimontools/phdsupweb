@@ -22,9 +22,9 @@ const AvatarLetterStyled = styled.div `
     @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
         position: relative;
         background-color: ${({ backColor }) => backColor ? backColor : PRIMARY_COLOR};
-        width: 30px;
-        height: 30px;
-        border-radius: 30px;
+        width: 33px;
+        height: 33px;
+        border-radius: 100%;
         display: flex;
         align-items: center; 
         justify-content: center;

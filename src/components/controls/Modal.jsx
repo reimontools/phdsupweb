@@ -33,7 +33,7 @@ const DivModalStyled = styled.div `
         width: ${({ width }) => width ? width : "500px"};
         position: relative;
         background: ${SECONDARY_COLOR};
-        border-radius: 5px;
+        border-radius: 10px;
     };
 
     @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {

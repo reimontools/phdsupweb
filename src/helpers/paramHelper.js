@@ -14,10 +14,6 @@ export const MEDIUM_SCREEN_SIZE = 768;
 export const SMALL_SCREEN_SIZE_PX = SMALL_SCREEN_SIZE + "px";
 export const MEDIUM_SCREEN_SIZE_PX = MEDIUM_SCREEN_SIZE + "px";
 
-export const LOWERCASEREGEX = /(?=.*[a-z])/;
-export const UPPERCASEREGEX = /(?=.*[A-Z])/;
-export const NUMERICREGEX = /(?=.*[0-9])/;
-
 export const PRIMARY_COLOR = "#663165";
 export const SECONDARY_COLOR = "#fff";
 
@@ -42,6 +38,12 @@ export const getColorByFamily = family => {
         case "newFloat": return PRIMARY_COLOR;
         case "backFloat": return "#959595";
         case "moreFloat": return "#0e70b8";
+
+        // STATE ####################################################################################################################################
+        case "active": return "#28a745";
+        case "inactive": return "#6c757d";
+        case "pending": return "#007bff";
+        case "reject": return "#dc3545";
 
         default: return PRIMARY_COLOR
     };
@@ -70,4 +72,30 @@ export const getIconByFamily = family => {
 
         default: return <RiAliensLine />
     };
+};
+
+export const formatLengthLink = text => {
+    if(!text) return "-";
+    let newText = text.substr(12);
+    if (newText.length > 17) {
+        newText = newText.substring(17, -1) + "...";
+    };
+    return newText;
+};
+
+export const formatLengthText = text => {
+    if(!text) return "-";
+    let newText = text;
+    if (newText.length > 22) {
+        newText = newText.substring(22, -1) + "...";
+    };
+    return newText;
+};
+
+// FOR YUP ##########################################################################################################################################
+export const LOWERCASEREGEX = /(?=.*[a-z])/;
+export const UPPERCASEREGEX = /(?=.*[A-Z])/;
+export const NUMERICREGEX = /(?=.*[0-9])/;
+export const getCapitalInSentence = sentence => {
+    return sentence.replace(/\b\w/g, l => l.toUpperCase());
 };

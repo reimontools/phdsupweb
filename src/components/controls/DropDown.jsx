@@ -8,7 +8,7 @@ const MenuStyled = styled.div `
     left: -160px;
     width: 150px;
     background-color: ${PRIMARY_COLOR};
-    border-radius: 10px;
+    border-radius: 8px;
     transition: 200ms;
     visibility: hidden;
     opacity: 0;
@@ -67,11 +67,11 @@ const ButtonIconStyled = styled.div `
         background-color: ${({ family }) => getColorByFamily(family)};
         color: white;
     };
-    @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
+    /* @media screen and (max-width: ${MEDIUM_SCREEN_SIZE_PX}) {
         &:hover {
             transform: none;
         };
-    };
+    }; */
 `;
 
 const ButtonTextStyled = styled.button `

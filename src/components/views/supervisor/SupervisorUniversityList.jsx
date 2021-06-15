@@ -1,22 +1,16 @@
 import { useState } from "react";
-import { Table, Container, Title, Modal, Avatar, DropDown, CrudSupervisorUniversity, Dialog, ButtonCircle, Link } from "../../../../component";
-import useModal from "../../../../hooks/useModal";
-import axios from '../../../../config/axios'
+import { Table, Container, Title, Modal, Avatar, DropDown, SupervisorUniversityCrud, Dialog, ButtonCircle, Link, Text } from "../../../component";
+import useModal from "../../../hooks/useModal";
+import axios from '../../../config/axios'
 
-const ListSupervisorUniversity = {
+const SupervisorUniversityList = {
     Basic: ({supervisor_id, fetch, supervisorUniversities, isOpen, close}) => {
         // STATE ########################################################################################################################################
         const [currentSupervisorUniversity, setCurrentSupervisorUniversity] = useState({});
         const [dialogOptions, setDialogOptions] = useState({});
 
         // CONST ########################################################################################################################################
-        const defaultSupervisorUniversity = {
-            supervisor_university_id: 0, 
-            university_id: "", 
-            supervisor_university_web: "", 
-            supervisor_university_group_web: "", 
-            supervisor_university_email: ""
-        };
+        const defaultSupervisorUniversity = {supervisor_university_id: 0, university_id: "", supervisor_university_web: "", supervisor_university_group_web: "", supervisor_university_email: ""};
 
         // MODAL ########################################################################################################################################
         const [isOpenModalCrudSupervisorUniversity, openModalCrudSupervisorUniversity, closeModalCrudSupervisorUniversity] = useModal();  
@@ -106,7 +100,7 @@ const ListSupervisorUniversity = {
             return (
                 <div className="avatar-container">
                     <Avatar.Letter>{supervisorUniversity.university_name[0]}</Avatar.Letter>
-                    {supervisorUniversity.university_name}
+                    <Text.Basic>{supervisorUniversity.university_name}</Text.Basic>
                 </div>
             );
         };
@@ -139,13 +133,13 @@ const ListSupervisorUniversity = {
                 </Modal.Form>
 
                 {/* CRUD SUPERVISOR UNIVERSITY  ##################################################################################################### */}
-                <CrudSupervisorUniversity.Basic supervisor_id={supervisor_id} fetch={fetch} supervisorUniversity={currentSupervisorUniversity} isOpen={isOpenModalCrudSupervisorUniversity} close={closeModalCrudSupervisorUniversity} /> 
+                <SupervisorUniversityCrud.Basic supervisor_id={supervisor_id} fetch={fetch} supervisorUniversity={currentSupervisorUniversity} isOpen={isOpenModalCrudSupervisorUniversity} close={closeModalCrudSupervisorUniversity} /> 
 
-                {/* DIALOG ############################################################################################################################## */}
+                {/* DIALOG ########################################################################################################################## */}
                 <Dialog.Action options={ dialogOptions } close={() => setDialogOptions({})} />
             </>
         );
     }
 };
 
-export default ListSupervisorUniversity;
+export default SupervisorUniversityList;

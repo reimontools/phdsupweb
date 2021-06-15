@@ -1,35 +1,35 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Container, Modal, Title, Button, Input, Select, Dialog } from "../../../../component";
+import { Container, Modal, Title, Button, Input, Dialog } from "../../../component";
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import axios from '../../../../config/axios'
-import useList from '../../../../hooks/useList';
+import axios from '../../../config/axios'
 
-const CrudSupervisorUniversity = {
-    Basic: ({supervisor_id, fetch, supervisorUniversity, isOpen, close}) => {
+const SupervisorCrud = {
+    Basic: ({fetch, supervisor, isOpen, close}) => {
 
         // STATE ########################################################################################################################################
         const [dialogOptions, setDialogOptions] = useState({});
-            
-        // LIST #########################################################################################################################################
-        const universityList = useList("list/university");
 
         // CRUD VALIDATIONS #############################################################################################################################
         const schemaCrud = Yup.object().shape({
-            university_id: Yup.string()
-                .required('Required!'),
-            supervisor_university_web: Yup.string()
+            supervisor_name: Yup.string()
                 .required('Required!')
-                .min(10, "Too short!")
+                .min(2, "Too short!")
                 .max(100, "Too long!"),
-            supervisor_university_group_web: Yup.string()
+            supervisor_surname: Yup.string()
+                .required('Required!')
+                .min(2, "Too short!")
+                .max(100, "Too long!"),
+            supervisor_orcid_web: Yup.string()
                 .url("Must be a valid url!")
                 .max(500, "Too long!"),
-            supervisor_university_email: Yup.string()
-                .lowercase()
-                .email("Must be a valid email!")
-                .max(50, "Too long!")
+            supervisor_research_web: Yup.string()
+                .url("Must be a valid url!")
+                .max(500, "Too long!"),
+            supervisor_academic_web: Yup.string()
+                .url("Must be a valid url!")
+                .max(500, "Too long!")
         });
 
         const { register: registerCrud, handleSubmit: handleSubmitCrud, errors: errorsCrud, reset: resetCrud } = useForm({
@@ -39,16 +39,16 @@ const CrudSupervisorUniversity = {
 
         // EFFECT #######################################################################################################################################
         useEffect(() => {
-            resetCrud(supervisorUniversity);
-        }, [supervisorUniversity, resetCrud]);
+            resetCrud(supervisor);
+        }, [supervisor, resetCrud]);
 
         // CRUD #########################################################################################################################################
-        const updateSupervisorUniversity = async data => {
+        const updateSupervisor = async data => {
             try {
-                const res = await axios.post("supervisor-university", {supervisor_id, supervisor_university_id: supervisorUniversity.supervisor_university_id, ...data});
+                const res = await axios.post("supervisor", {supervisor_id: supervisor.supervisor_id, ...data});
                 switch(res.data.result.cod) {
                     case 0:
-                        fetch(supervisor_id);
+                        fetch();
                         close();
                         break;
                     case 1:
@@ -70,19 +70,20 @@ const CrudSupervisorUniversity = {
         return (
             <Modal.Form isOpen={isOpen} closeModal={close}>
                 <Container.Basic>
-                    <Title.Basic>{supervisorUniversity.supervisor_university_id === 0 ? "New Supervisor University" : "Update Supervisor University"}</Title.Basic>
-                    <Select.Validation name="university_id" label="University" placeholder="Select a university" register={registerCrud} content={universityList} error={errorsCrud.university_id}/>
-                    <Input.Validation name="supervisor_university_web" label="Personal website from University *" placeholder="Set personal website from University" register={registerCrud} error={errorsCrud.supervisor_university_web} />
-                    <Input.Validation name="supervisor_university_group_web" label="Laboratory or group website" placeholder="Set laboratory or group website" register={registerCrud} error={errorsCrud.supervisor_university_group_web} />
-                    <Input.Validation name="supervisor_university_email" label="Institutional email" placeholder="Set institutional email" register={registerCrud} error={errorsCrud.supervisor_university_email} />
-                    <Button.Basic onClick={handleSubmitCrud(updateSupervisorUniversity)}>Save</Button.Basic>
+                    <Title.Basic>{supervisor.supervisor_id === 0 ? "New Supervisor University" : "Update Supervisor University"}</Title.Basic>
+                    <Input.Validation name="supervisor_name" label="Name *" placeholder="Set supervisor name" register={registerCrud} error={errorsCrud.supervisor_name} />
+                    <Input.Validation name="supervisor_surname" label="Surname *" placeholder="Set supervisor surname" register={registerCrud} error={errorsCrud.supervisor_surname} />
+                    <Input.Validation name="supervisor_orcid_web" label="Orcid Link" placeholder="Set supervisor Orcid Link" register={registerCrud} error={errorsCrud.supervisor_orcid_web} />
+                    <Input.Validation name="supervisor_research_web" label="Researchgate Website" placeholder="Set supervisor Researchgate Website" register={registerCrud} error={errorsCrud.supervisor_research_web} />
+                    <Input.Validation name="supervisor_academic_web" label="Academic Google" placeholder="Set supervisor Academic Google" register={registerCrud} error={errorsCrud.supervisor_academic_web} />
+                    <Button.Basic onClick={handleSubmitCrud(updateSupervisor)}>Save</Button.Basic>
                 </Container.Basic>
                 
                 {/* DIALOG ############################################################################################################################## */}
-                <Dialog.Action options={ dialogOptions } close={() => setDialogOptions({})} />
+                <Dialog.Action options={dialogOptions} close={() => setDialogOptions({})} />
             </Modal.Form>
         );
     }
 };
 
-export default CrudSupervisorUniversity;
+export default SupervisorCrud;

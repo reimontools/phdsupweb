@@ -1,4 +1,4 @@
-import { Title, Container } from "../../../component";
+import { Title, Container } from "../../component";
 export default function Dashboard() {
     return (
         <Container.Basic>

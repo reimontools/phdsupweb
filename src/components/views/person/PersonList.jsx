@@ -1,24 +1,30 @@
 import { useState, useEffect} from "react";
-import { Table, Loading, Container, Dialog, Title, Button, DropDown, Avatar, ListPersonSupervisor, ButtonFloat, CrudPerson, CrudConcre, Simbol } from "../../../component";
+import { Table, Loading, Container, Dialog, Title, Button, DropDown, Avatar, ButtonFloat, PersonCrud, ConcreCrud, Simbol, Text, PersonSupervisorUniversityList, PersonUniversityList } from "../../../component";
 import { getList } from '../../../helpers/listHelper';
 import useModal from "../../../hooks/useModal";
 import axios from '../../../config/axios'
+import useAppContext from '../../../hooks/useAppContext';
 
 const ListPerson = () => {
+    // CONTEXT ######################################################################################################################################
+    const { user } = useAppContext();
+
     // CONST ########################################################################################################################################
-    const defaultPerson = {person_id: 0, person_name: "", person_surname: "", person_nickname: "", person_email: "", person_mobile_number: "", country_id: "", person_is_phd_finish: false, phd_finish_year_id: "", phd_current_year_id: ""};
+    const defaultPerson = {person_id: 0, person_name: "", person_surname: "", person_nickname: "", person_email: "", person_mobile_number: "", country_id: ""};
 
     // STATE ########################################################################################################################################
     const [persons, setPersons] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPerson, setcurrentPerson] = useState({});
-    const [personSupervisors, setPersonSupervisors] = useState([]);
+    const [personUniversities, setPersonUniversities] = useState([]);
+    const [personSupervisorUniversities, setPersonSupervisorUniversities] = useState([]);
     const [dialogOptions, setDialogOptions] = useState({});
 
     // MODAL ########################################################################################################################################
     const [isOpenModalCrudPerson, openModalCrudPerson, closeModalCrudPerson] = useModal();
     const [isOpenModalConcre, openModalConcre, closeModalConcre] = useModal();
     const [isOpenModalPersonSupervisor, openModalPersonSupervisor, closeModalPersonSupervisor] = useModal();
+    const [isOpenModalPersonUniversity, openModalPersonUniversity, closeModalPersonUniversity] = useModal();
 
     // EFFECT #######################################################################################################################################
     useEffect(() => fetchPersons(), []);
@@ -31,14 +37,21 @@ const ListPerson = () => {
         setLoading(false);
     };
 
-    const fetchPersonSupervisors = async person_id => {
-        const personSupervisors = await getList("person-supervisor/" + person_id);
-        setPersonSupervisors(personSupervisors);
+    const fetchPersonSupervisorUniversitiesByPersonId = async person_id => {
+        const personSupervisorUniversities = await getList("person-supervisor-university/" + person_id);
+        setPersonSupervisorUniversities(personSupervisorUniversities);
     };
+
+    const fetchPersonUniversitiesByPersonId = async person_id => {
+        const personUniversities = await getList("person-university/" + person_id);
+        setPersonUniversities(personUniversities);
+    };
+
 
     const fetchAll = async person_id => {
         fetchPersons()
-        fetchPersonSupervisors(person_id);
+        fetchPersonSupervisorUniversitiesByPersonId(person_id);
+        fetchPersonUniversitiesByPersonId(person_id);
     };
 
     // CRUD #########################################################################################################################################
@@ -89,17 +102,23 @@ const ListPerson = () => {
         openModalConcre();
     };
 
-    const handleUserState = (e, person) => {
+    const handleUserState = (e, state_id, person) => {
         e.stopPropagation();
-        if (person.user_state_id === 1) updateUserState(person.user_id, 2);
-        if (person.user_state_id === 2) updateUserState(person.user_id, 1);
+        if (person.user_state_id !== state_id) updateUserState(person.user_id, state_id);
     };
 
     const handleButtonSupervisors = (e, person) => {
         e.stopPropagation();
         setcurrentPerson(person);
-        fetchPersonSupervisors(person.person_id);
+        fetchPersonSupervisorUniversitiesByPersonId(person.person_id);
         openModalPersonSupervisor();
+    };
+
+    const handleButtonUniversities = (e, person) => {
+        e.stopPropagation();
+        setcurrentPerson(person);
+        fetchPersonUniversitiesByPersonId(person.person_id);
+        openModalPersonUniversity();
     };
 
     // RENDERS ######################################################################################################################################
@@ -111,6 +130,7 @@ const ListPerson = () => {
                 <th>Email</th>
                 <th>Mobile</th>
                 <th>Country</th>
+                <th>Universities</th>
                 <th>Supervisors</th>
                 <th>Rol</th>
                 <th>User Status</th>
@@ -143,43 +163,56 @@ const ListPerson = () => {
                 <td className={classContent} data-label='Email'>{person.person_email}</td>
                 <td className={classContent} data-label='Mobile'>{person.person_mobile_number}</td>
                 <td className={classContent} data-label='Country'>{person.country_name}</td>
-                <td className={classContent} data-label='Supervisors'>{renderButtonSupervisors(person)}</td>
+                <td className={classContent} data-label='Universities'>{renderButtonUniversities(person)}</td>
+                <td className={classContent} data-label='Supervisors'>{renderButtonSupervisorUniversities(person)}</td>
                 <td className={classContent} data-label='Rol'>{person.rol_name}</td>
-                <td className={classContent} data-label='User status'>{renderButtonState(person)}</td>
+                <td className={classContent} data-label='User state'>{renderButtonState(person)}</td>
                 <td className={classActions}>{renderActions(person)}</td>
             </tr>
         );
     };
 
     const renderButtonState = person => {
-        var text = person.state_name;
-        // person.user_state_id === 1 ? family = "check" : family = "edit";
-        // return <Button.Basic family={family} onClick={e => handleUserState(e, person)} fit height="auto" size="12px" weight="400" hover>{text}</Button.Basic>;
         return (
-            <DropDown.ButtonText family="more" text={text} >
-                <div onClick={e => handleUserState(e, person)}><Simbol.Point family="add"/>Active</div>
-                <div><Simbol.Point family="alert" />Pending</div>
+            <DropDown.ButtonText family="more" text={person.state_name} >
+                <div onClick={e => handleUserState(e, 1, person)}><Simbol.Point family="active"/>Active</div>
+                <div onClick={e => handleUserState(e, 2, person)}><Simbol.Point family="pending"/>Pending</div>
+                <div onClick={e => handleUserState(e, 3, person)}><Simbol.Point family="reject"/>Reject</div>
             </DropDown.ButtonText>
         );
     };
 
-    const renderButtonSupervisors = person => {
+    const renderButtonSupervisorUniversities = person => {
+        if (person.rol_id === 1) return "-";
         var text = "", family = "";
-        if (person.person_count_supervisor > 0) {
-            text = person.person_count_supervisor + " supervisors";
+        if (person.person_count_supervisor_university > 0) {
+            text = person.person_count_supervisor_university + " Supervisors";
             family = "remove";
         } else {
-            text = "No supervisors";
+            text = "No Supervisors";
             family = "remove";
         };
         return <Button.Basic family={family} onClick={e => handleButtonSupervisors(e, person)} fit height="auto" size="12px" weight="400" hover>{text}</Button.Basic>;
+    };
+
+    const renderButtonUniversities = person => {
+        if (person.rol_id === 1) return "-";
+        var text = "", family = "";
+        if (person.person_count_university > 0) {
+            text = person.person_count_university + " Universities";
+            family = "remove";
+        } else {
+            text = "No Universities";
+            family = "remove";
+        };
+        return <Button.Basic family={family} onClick={e => handleButtonUniversities(e, person)} fit height="auto" size="12px" weight="400" hover>{text}</Button.Basic>;
     };
 
     const renderDropDown = person => {
         return (
             <DropDown.ButtonIcon family="more">
                 <div onClick={e => handleUpdatePerson(e, person)}>Update</div>
-                <div onClick={e => handleDelete(e, person)}>Delete</div>
+                {person.rol_id !== 1 && <div onClick={e => handleDelete(e, person)}>Delete</div>}
                 <div onClick={e => handleUpdateConcre(e, person)}>Password</div>
             </DropDown.ButtonIcon>
         );
@@ -197,7 +230,7 @@ const ListPerson = () => {
         return (
             <div className="avatar-container">
                 <Avatar.Letter>{person.person_name[0]}</Avatar.Letter>
-                {person.person_fullname}
+                <Text.Basic>{person.person_fullname}</Text.Basic>
             </div>
         );
     };
@@ -226,13 +259,16 @@ const ListPerson = () => {
             <Dialog.Action options={ dialogOptions } close={() => setDialogOptions({})} />
 
             {/* CRUD PERSON ######################################################################################################################### */}
-            <CrudPerson.Basic fetch={fetchPersons} person={currentPerson} isOpen={isOpenModalCrudPerson} close={closeModalCrudPerson} />
+            <PersonCrud fetch={fetchPersons} person={currentPerson} isOpen={isOpenModalCrudPerson} close={closeModalCrudPerson} />
 
             {/* CRUD CONCRE ######################################################################################################################### */}
-            <CrudConcre.Basic person={currentPerson} isOpen={isOpenModalConcre} close={closeModalConcre} />
+            <ConcreCrud.Basic person={currentPerson} isOpen={isOpenModalConcre} close={closeModalConcre} />
 
             {/* LIST SUPERVISOR UNIVERSITY ########################################################################################################## */}
-            <ListPersonSupervisor.Basic person_id={currentPerson.person_id} fetch={fetchAll} personSupervisors={personSupervisors} isOpen={isOpenModalPersonSupervisor} close={closeModalPersonSupervisor} />
+            <PersonSupervisorUniversityList person_id={currentPerson.person_id} fetch={fetchAll} personSupervisorUniversities={personSupervisorUniversities} isOpen={isOpenModalPersonSupervisor} close={closeModalPersonSupervisor} />
+
+            {/* LIST UNIVERSITIES ################################################################################################################### */}
+            <PersonUniversityList user_id={user.user_id} person_id={currentPerson.person_id} fetch={fetchAll} personUniversities={personUniversities} isOpen={isOpenModalPersonUniversity} close={closeModalPersonUniversity} />
 
         </Container.Primary>
     );

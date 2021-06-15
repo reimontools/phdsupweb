@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PRIMARY_COLOR } from "../../helpers/paramHelper";
+import { PRIMARY_COLOR, formatLengthLink } from "../../helpers/paramHelper";
 
 const LinkStyled = styled.a `
    text-decoration: none;
@@ -23,7 +23,7 @@ const Link = {
     Basic: ({...linkProps}) => {
         return ( 
             <LinkStyled {...linkProps} target="_blank" onClick={e => e.stopPropagation()}>
-                {linkProps.href.substring(17,-1) + "..."}
+                {formatLengthLink(linkProps.href)}
             </LinkStyled>
         );
     }

@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import axios from '../../../config/axios'
 import { LOWERCASEREGEX, UPPERCASEREGEX, NUMERICREGEX } from "../../../helpers/paramHelper";
 
-const CrudConcre = {
+const ConcreCrud = {
     Basic: ({person, isOpen, close}) => {
         
         // STATE ####################################################################################################################################
@@ -67,4 +67,4 @@ const CrudConcre = {
     }
 };
 
-export default CrudConcre;
+export default ConcreCrud;
