@@ -8,7 +8,7 @@ const MenuStyled = styled.div `
     left: -160px;
     width: 150px;
     background-color: ${PRIMARY_COLOR};
-    border-radius: 8px;
+    border-radius: 10px;
     transition: 200ms;
     visibility: hidden;
     opacity: 0;

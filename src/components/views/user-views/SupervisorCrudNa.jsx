@@ -4,15 +4,11 @@ import { Container, Modal, Title, Button, Input, Dialog, Select } from "../../..
 import * as Yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from '../../../config/axios'
-import useList from '../../../hooks/useList';
 import { getCapitalInSentence } from "../../../helpers/paramHelper";
 
-const FullSupervisorCrudNa = ({fetch, isOpen, close}) => {
+const SupervisorCrudNa = ({person_id, personUniversityList, fetch, isOpen, close}) => {
     // STATE ########################################################################################################################################
     const [dialogOptions, setDialogOptions] = useState({});
-
-    // LIST #########################################################################################################################################
-    const universityList = useList("list/university");
 
     // CRUD VALIDATIONS #############################################################################################################################
     const schemaCrud = Yup.object().shape({
@@ -74,8 +70,8 @@ const FullSupervisorCrudNa = ({fetch, isOpen, close}) => {
             console.log("res", res);
             switch(res.data.result.cod) {
                 case 0:
-                    fetch();
-                    handleClose(res.data.result.supervisor_university_id);
+                    fetch(person_id);
+                    handleClose();
                     break;
                 case 1:
                     setDialogOptions({family: "info", title: 'Alert', text : 'Supervisor already exists!'})
@@ -93,9 +89,9 @@ const FullSupervisorCrudNa = ({fetch, isOpen, close}) => {
     };
 
     // HANDLES ######################################################################################################################################
-    const handleClose = supervisor_university_id => {
+    const handleClose = () => {
         resetCrud({supervisor_name: "", supervisor_surname: "", supervisor_orcid_web: "", supervisor_research_web: "", supervisor_academic_web: "", university_id: "", supervisor_university_web: "", supervisor_university_group_web: "", supervisor_university_email: ""});
-        close(supervisor_university_id)
+        close()
     };
 
     // JSX ##########################################################################################################################################
@@ -108,7 +104,7 @@ const FullSupervisorCrudNa = ({fetch, isOpen, close}) => {
                 <Input.Validation name="supervisor_orcid_web" label="Orcid Link *" placeholder="https://orcid.org/0000-0001-2345-6789" register={registerCrud} error={errorsCrud.supervisor_orcid_web} />
                 <Input.Validation name="supervisor_research_web" label="Researchgate Website" placeholder="Set supervisor Researchgate Website" register={registerCrud} error={errorsCrud.supervisor_research_web} />
                 <Input.Validation name="supervisor_academic_web" label="Academic Google" placeholder="Set supervisor Academic Google" register={registerCrud} error={errorsCrud.supervisor_academic_web} />
-                <Select.Validation name="university_id" label="University" placeholder="Select a university" register={registerCrud} content={universityList} error={errorsCrud.university_id}/>
+                <Select.Validation name="university_id" label="University" placeholder="Select a university" register={registerCrud} content={personUniversityList} error={errorsCrud.university_id}/>
                 <Input.Validation name="supervisor_university_web" label="Personal website from University *" placeholder="Set personal website from University" register={registerCrud} error={errorsCrud.supervisor_university_web} />
                 <Input.Validation name="supervisor_university_group_web" label="Laboratory or group website" placeholder="Set laboratory or group website" register={registerCrud} error={errorsCrud.supervisor_university_group_web} />
                 <Input.Validation name="supervisor_university_email" label="Institutional email" placeholder="Set institutional email" register={registerCrud} error={errorsCrud.supervisor_university_email} />
@@ -122,4 +118,4 @@ const FullSupervisorCrudNa = ({fetch, isOpen, close}) => {
 }
 
 
-export default FullSupervisorCrudNa;
+export default SupervisorCrudNa;

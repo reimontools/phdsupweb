@@ -76,7 +76,7 @@ export const getIconByFamily = family => {
 
 export const formatLengthLink = text => {
     if(!text) return "-";
-    let newText = text.substr(12);
+    let newText = text.substr(8);
     if (newText.length > 17) {
         newText = newText.substring(17, -1) + "...";
     };

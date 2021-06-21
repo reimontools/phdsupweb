@@ -127,7 +127,7 @@ export default function PersonUniversityListU() {
     const renderDropDown = personUniversity => {
         return (
             <DropDown.ButtonIcon family="more">
-                <div onClick={e => handleUpdate(e, personUniversity)}>Update</div>
+                {personUniversity.state_id === 2 && <div onClick={e => handleUpdate(e, personUniversity)}>Update</div>}
                 <div onClick={e => handleDelete(e, personUniversity)}>Delete</div>
             </DropDown.ButtonIcon>
         );

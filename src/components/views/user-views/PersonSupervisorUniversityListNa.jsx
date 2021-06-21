@@ -17,7 +17,8 @@ export default function PersonSupervisorUniversityListU() {
     // CONST ########################################################################################################################################
     const defaultPersonSupervisor = {
         person_supervisor_university_id: 0, 
-        supervisor_university_id: ""
+        supervisor_id: "",
+        university_id: ""
     };
 
     // MODAL ########################################################################################################################################

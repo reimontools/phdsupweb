@@ -1,21 +1,11 @@
 import { useState } from "react";
-import { Table, Container, Title, Modal, Avatar, DropDown, PersonSupervisorUniversityCrud, Dialog, ButtonCircle, Text, Simbol } from "../../../component";
-import useModal from "../../../hooks/useModal";
+import { Table, Container, Title, Modal, Avatar, DropDown, Dialog, Text, Simbol } from "../../../component";
 import axios from '../../../config/axios'
 
 const PersonSupervisorUniversityList = ({person_id, fetch, personSupervisorUniversities, isOpen, close}) => {
     // STATE ########################################################################################################################################
     const [currentPersonSupervisorUniversity, setCurrentPersonSupervisorUniversity] = useState({});
     const [dialogOptions, setDialogOptions] = useState({});
-
-    // CONST ########################################################################################################################################
-    const defaultPersonSupervisor = {
-        person_supervisor_university_id: 0, 
-        supervisor_university_id: ""
-    };
-
-    // MODAL ########################################################################################################################################
-    const [isOpenModalCrudPersonSupervisor, openModalCrudPersonSupervisor, closeModalCrudPersonSupervisor] = useModal();  
 
     // CRUD #########################################################################################################################################
     const updatePersonSupervisorUniversityIsActive = async person_supervisor_university_id => {
@@ -51,12 +41,6 @@ const PersonSupervisorUniversityList = ({person_id, fetch, personSupervisorUnive
     const handleDelete = (e, personSupervisorUniversity) => {
         e.stopPropagation();
         setDialogOptions({family: "delete", title: 'Delete this personSupervisorUniversity?', text: 'Are you sure you want to delete this personSupervisorUniversity?', action: () => updatePersonSupervisorUniversityIsActive(personSupervisorUniversity.person_supervisor_university_id) });
-    };
-
-    const handleUpdate = (e, personSupervisorUniversity) => {
-        e.stopPropagation();
-        setCurrentPersonSupervisorUniversity(personSupervisorUniversity);
-        openModalCrudPersonSupervisor();
     };
 
     const handlePersonSupervisorUniversityState = (e, state_id, personSupervisorUniversity) => {
@@ -123,7 +107,7 @@ const PersonSupervisorUniversityList = ({person_id, fetch, personSupervisorUnive
     const renderDropDown = personSupervisorUniversity => {
         return (
             <DropDown.ButtonIcon family="more">
-                <div onClick={e => handleUpdate(e, personSupervisorUniversity)}>Update</div>
+                {/* <div onClick={e => handleUpdate(e, personSupervisorUniversity)}>Update</div> */}
                 <div onClick={e => handleDelete(e, personSupervisorUniversity)}>Delete</div>
             </DropDown.ButtonIcon>
         );
@@ -131,7 +115,7 @@ const PersonSupervisorUniversityList = ({person_id, fetch, personSupervisorUnive
 
     const renderButtonState = personSupervisorUniversity => {
         return (
-            <DropDown.ButtonText family="more" text={personSupervisorUniversity.state_name} >
+            <DropDown.ButtonText family="more" text={personSupervisorUniversity.person_supervisor_university_state_name} >
                 <div onClick={e => handlePersonSupervisorUniversityState(e, 1, personSupervisorUniversity)}><Simbol.Point family="active"/>Active</div>
                 <div onClick={e => handlePersonSupervisorUniversityState(e, 2, personSupervisorUniversity)}><Simbol.Point family="pending"/>Pending</div>
                 <div onClick={e => handlePersonSupervisorUniversityState(e, 3, personSupervisorUniversity)}><Simbol.Point family="reject"/>Reject</div>
@@ -145,7 +129,7 @@ const PersonSupervisorUniversityList = ({person_id, fetch, personSupervisorUnive
             {/* TABLE SUPERVISOR UNIVERSITY  #################################################################################################### */}
             <Modal.Form isOpen={isOpen} closeModal={close} width="700px">
                 <Container.Basic>
-                    <ButtonCircle.Icon family="new" left="5px" top="5px" fontSize="17px" onClick={e => handleUpdate(e, defaultPersonSupervisor)} />
+                    {/* <ButtonCircle.Icon family="new" left="5px" top="5px" fontSize="17px" onClick={e => handleUpdate(e, defaultPersonSupervisor)} /> */}
                     <Title.Basic>Supervisors</Title.Basic>
                     {personSupervisorUniversities.length === 0 
                         ?   <Container.NoRows>There is not personSupervisorUniversity.</Container.NoRows>
@@ -156,9 +140,6 @@ const PersonSupervisorUniversityList = ({person_id, fetch, personSupervisorUnive
                     }
                 </Container.Basic>
             </Modal.Form>
-
-            {/* CRUD SUPERVISOR UNIVERSITY  ##################################################################################################### */}
-            <PersonSupervisorUniversityCrud person_id={person_id} fetch={fetch} personSupervisorUniversity={currentPersonSupervisorUniversity} isOpen={isOpenModalCrudPersonSupervisor} close={closeModalCrudPersonSupervisor} /> 
 
             {/* DIALOG ############################################################################################################################## */}
             <Dialog.Action options={ dialogOptions } close={() => setDialogOptions({})} />
